@@ -14,11 +14,26 @@ package frc.robot;
  */
 public final class Constants {
     public final class DriveConstants {
-        public static final int TEST_MODULE_DRIVE_CAN = 3;
-        public static final int TEST_MODULE_STEER_CAN = 9; 
-        public static final int TEST_MODULE_STEER_ENCODER = 9; 
-        public static final int TEST_MODULE_STEER_OFFSET = 0; 
+        public static final int FRONTRIGHT_MODULE_DRIVE_CAN = 1;
+        public static final int FRONTRIGHT_MODULE_STEER_CAN = 2; 
+        public static final int FRONTRIGHT_MODULE_STEER_ENCODER = 2; 
+        public static final int FRONTRIGHT_MODULE_STEER_OFFSET = 0; 
+        public static final int FRONTLEFT_MODULE_DRIVE_CAN = 3;
+        public static final int FRONTLEFT_MODULE_STEER_CAN = 4; 
+        public static final int FRONTLEFT_MODULE_STEER_ENCODER = 4; 
+        public static final int FRONTLEFT_MODULE_STEER_OFFSET = 0; 
+        public static final int BACKRIGHT_MODULE_DRIVE_CAN = 5;
+        public static final int BACKRIGHT_MODULE_STEER_CAN = 6; 
+        public static final int BACKRIGHT_MODULE_STEER_ENCODER = 6; 
+        public static final int BACKRIGHT_MODULE_STEER_OFFSET = 0; 
+        public static final int BACKLEFT_MODULE_DRIVE_CAN = 7;
+        public static final int BACKLEFT_MODULE_STEER_CAN = 8; 
+        public static final int BACKLEFT_MODULE_STEER_ENCODER = 8; 
+        public static final int BACKLEFT_MODULE_STEER_OFFSET = 0; 
         public static final double MAX_SPEED = 0.1;
+        public static final double CHASSIS_WIDTH = 0.508;
+        public static final double CHASSIS_LENGTH = 0.6223;
+
     }
     public final class ClawConstants {
         public static final int ENCODER_TICKS = 42;
