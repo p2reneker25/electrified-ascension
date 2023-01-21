@@ -8,8 +8,11 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.TurnWrist;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Wrist;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -20,12 +23,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveTrain drivetrain = new DriveTrain();
+  private final Wrist wrist = new Wrist();
   private final Joystick joystick;
+  private final JoystickButton b_turnWrist;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     joystick = new Joystick(0);
+    b_turnWrist = new JoystickButton(joystick, Constants.ButtonConstants.BUTTON_WRIST);
     configureButtonBindings();
   }
 
@@ -36,6 +42,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    b_turnWrist.onTrue(new TurnWrist(wrist));
     drivetrain.setDefaultCommand(new DriveCommand(drivetrain, joystick));
   }
 

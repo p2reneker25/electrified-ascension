@@ -20,4 +20,12 @@ public final class Constants {
         public static final int TEST_MODULE_STEER_OFFSET = 0; 
         public static final double MAX_SPEED = 0.1;
     }
+    public final class ClawConstants {
+        public static final int ENCODER_TICKS = 42;
+        public static final int WRIST_CAN = 5;
+        public static final double CONST_SPEED = 0.3;
+    }
+    public final class ButtonConstants {
+        public static final int BUTTON_WRIST = 2;
+    }
 }
