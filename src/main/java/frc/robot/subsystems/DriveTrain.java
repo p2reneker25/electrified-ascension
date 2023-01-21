@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
@@ -19,7 +17,6 @@ import frc.robot.Constants.DriveConstants;
 public class DriveTrain extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   private final SwerveModule test;
-  // CANSparkMax t = new CANSparkMax(9, MotorType.kBrushless);
   private ChassisSpeeds chassisSpeeds;
   private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
       new Translation2d(0,0), 
