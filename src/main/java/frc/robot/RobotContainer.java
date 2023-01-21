@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final DriveTrain drivetrain = new DriveTrain();
+  //private final DriveTrain drivetrain = new DriveTrain();
   private final Wrist wrist = new Wrist();
   private final Joystick joystick;
   private final JoystickButton b_turnWrist;
@@ -43,7 +43,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     b_turnWrist.onTrue(new TurnWrist(wrist));
-    drivetrain.setDefaultCommand(new DriveCommand(drivetrain, joystick));
+    //drivetrain.setDefaultCommand(new DriveCommand(drivetrain, joystick));
   }
 
   /**

@@ -5,6 +5,7 @@ import frc.robot.subsystems.Wrist;
 
 public class TurnWrist extends CommandBase {
     private Wrist wrist;
+    private boolean exit;
     public TurnWrist(Wrist wr) {
         wrist = wr;
     }
@@ -15,6 +16,7 @@ public class TurnWrist extends CommandBase {
     @Override
     public void execute() {
         wrist.rotateDegrees(90);
+        exit = true;
     }
   
     // Called once the command ends or is interrupted.
@@ -26,7 +28,7 @@ public class TurnWrist extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-      return false;
+      return exit;
     }
   
 }

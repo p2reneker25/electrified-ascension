@@ -5,6 +5,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ClawConstants;
@@ -21,15 +22,19 @@ public class Wrist extends SubsystemBase {
     public void periodic() {
         RelativeEncoder builtin = speedcontroller.getEncoder();
         double pos = builtin.getPosition();
-        double targetpos = (targetAngle/360.0) * 42.0;
-        if (Math.abs(pos-targetpos) > 2) {
+        double targetpos = (targetAngle/360.0);
+        if (Math.abs(pos-targetpos) > 0.04) {
             if (pos < targetpos) {
-                speedcontroller.set(0.3);
+                speedcontroller.set(0.02);
             }else {
-                speedcontroller.set(-0.3);
+                speedcontroller.set(-0.02);
             }
         }else {
             speedcontroller.set(0);
         }
+        speedcontroller.getBusVoltage()
+        SmartDashboard.putNumber("Wrist Encoder Value", pos);
+        SmartDashboard.putNumber("Wrist Target Value", (targetAngle/360.0));
+
     }
 }
