@@ -47,5 +47,10 @@ public final class Constants {
     }
     public final class ButtonConstants {
         public static final int BUTTON_WRIST = 2;
+        public static final int BUTTON_ARMFORWARD = 5;
+        public static final int BUTTON_ARMBACKWARD = 3;
+    }
+    public final class ArmConstants {
+        public static final int ARM_PWM = 0;
     }
 }
