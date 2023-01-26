@@ -32,7 +32,6 @@ public class Wrist extends SubsystemBase {
         }else {
             speedcontroller.set(0);
         }
-        speedcontroller.getBusVoltage()
         SmartDashboard.putNumber("Wrist Encoder Value", pos);
         SmartDashboard.putNumber("Wrist Target Value", (targetAngle/360.0));
 
