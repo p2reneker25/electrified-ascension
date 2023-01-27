@@ -5,7 +5,7 @@ public class ArmBackward {
     
     private double speed;
     private Arm armMotor;
-    Timer timer = new Timer();
+    
     public ArmBackward(Arm a){
         armMotor = a;
     }
@@ -16,7 +16,7 @@ public class ArmBackward {
     }
     public void end(boolean interrupted){
         armMotor.setMotor(0);
-        timer.reset();
+        
     }
-    public boolean isFinished(){return (timer.get() > 3);}
+    public boolean isFinished(){}
 }
