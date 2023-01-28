@@ -1,22 +1,22 @@
 package frc.robot.commands;
 import frc.robot.subsystems.*;
-import edu.wpi.first.wpilibj.Timer;
-public class ArmForward {
+import edu.wpi.first.wpilibj2.command.CommandBase;
+public class ArmForward extends CommandBase {
     
-    private double speed;
+    
     private Arm armMotor;
-    Timer timer = new Timer();
+    
     public ArmForward(Arm a){
         armMotor = a;
     }
-    public void initialize(){timer.start();}
+    public void initialize(){}
 
     public void execute(){
         armMotor.setMotor(0.3);
     }
     public void end(boolean interrupted){
         armMotor.setMotor(0);
-        timer.reset();
+        
     }
-    public boolean isFinished(){return (timer.get() > 3);}
+    public boolean isFinished(){return false;}
 }
