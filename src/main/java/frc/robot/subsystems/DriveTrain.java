@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.kauailabs.navx.frc.AHRS;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
@@ -13,8 +14,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
+
+import edu.wpi.first.wpilibj.I2C;
 public class DriveTrain extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   private final DriveModule frontright;
@@ -22,46 +24,51 @@ public class DriveTrain extends SubsystemBase {
   private final DriveModule backright;
   private final DriveModule backleft;
   private ChassisSpeeds chassisSpeeds;
+  public AHRS NAVX = new AHRS(I2C.Port.kOnboard);
   private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-      new Translation2d(Constants.DriveConstants.CHASSIS_LENGTH / 2,Constants.DriveConstants.CHASSIS_WIDTH / 2), 
-      new Translation2d(Constants.DriveConstants.CHASSIS_LENGTH,-Constants.DriveConstants.CHASSIS_WIDTH / 2), 
-      new Translation2d(-Constants.DriveConstants.CHASSIS_LENGTH / 2,Constants.DriveConstants.CHASSIS_WIDTH / 2), 
-      new Translation2d(-Constants.DriveConstants.CHASSIS_LENGTH/2,-Constants.DriveConstants.CHASSIS_WIDTH/2)
+      new Translation2d(DriveConstants.CHASSIS_WIDTH / 2,DriveConstants.CHASSIS_LENGTH / 2), 
+      new Translation2d(DriveConstants.CHASSIS_WIDTH,-DriveConstants.CHASSIS_LENGTH / 2), 
+      new Translation2d(-DriveConstants.CHASSIS_WIDTH / 2,DriveConstants.CHASSIS_LENGTH / 2), 
+      new Translation2d(-DriveConstants.CHASSIS_WIDTH/2,-DriveConstants.CHASSIS_LENGTH/2)
   );
 
   public DriveTrain() {
     frontright = new DriveModule(
-      Constants.DriveConstants.FRONTRIGHT_MODULE_DRIVE_CAN,
-      Constants.DriveConstants.FRONTRIGHT_MODULE_STEER_CAN,
-      Constants.DriveConstants.FRONTRIGHT_MODULE_ENCODER,
-      Constants.DriveConstants.FRONTRIGHT_MODULE_OFFSET
+      DriveConstants.FRONTRIGHT_MODULE_DRIVE_CAN,
+      DriveConstants.FRONTRIGHT_MODULE_STEER_CAN,
+      DriveConstants.FRONTRIGHT_MODULE_ENCODER,
+      DriveConstants.FRONTRIGHT_MODULE_OFFSET
     );
     frontleft = new DriveModule(
-      Constants.DriveConstants.FRONTLEFT_MODULE_DRIVE_CAN,
-      Constants.DriveConstants.FRONTLEFT_MODULE_STEER_CAN,
-      Constants.DriveConstants.FRONTLEFT_MODULE_ENCODER,
-      Constants.DriveConstants.FRONTLEFT_MODULE_OFFSET
+      DriveConstants.FRONTLEFT_MODULE_DRIVE_CAN,
+      DriveConstants.FRONTLEFT_MODULE_STEER_CAN,
+      DriveConstants.FRONTLEFT_MODULE_ENCODER,
+      DriveConstants.FRONTLEFT_MODULE_OFFSET
     );
     backright = new DriveModule(
-      Constants.DriveConstants.BACKRIGHT_MODULE_DRIVE_CAN,
-      Constants.DriveConstants.BACKRIGHT_MODULE_STEER_CAN,
-      Constants.DriveConstants.BACKRIGHT_MODULE_ENCODER,
-      Constants.DriveConstants.BACKRIGHT_MODULE_OFFSET
+      DriveConstants.BACKRIGHT_MODULE_DRIVE_CAN,
+      DriveConstants.BACKRIGHT_MODULE_STEER_CAN,
+      DriveConstants.BACKRIGHT_MODULE_ENCODER,
+      DriveConstants.BACKRIGHT_MODULE_OFFSET
     );
     backleft = new DriveModule(
-      Constants.DriveConstants.BACKLEFT_MODULE_DRIVE_CAN,
-      Constants.DriveConstants.BACKLEFT_MODULE_STEER_CAN,
-      Constants.DriveConstants.BACKLEFT_MODULE_ENCODER,
-      Constants.DriveConstants.BACKLEFT_MODULE_OFFSET
+      DriveConstants.BACKLEFT_MODULE_DRIVE_CAN,
+      DriveConstants.BACKLEFT_MODULE_STEER_CAN,
+      DriveConstants.BACKLEFT_MODULE_ENCODER,
+      DriveConstants.BACKLEFT_MODULE_OFFSET
     );
   
       chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
   }
-  public void drive(double x, double y) {
+  public void drive(double x, double y, double z) {
     if (Math.abs(x) < 0.12) {x = 0;}
     if (Math.abs(y) < 0.12) {y = 0;}
+    if (Math.abs(z) < 0.12) {z = 0;}
     chassisSpeeds.vxMetersPerSecond = -y;
     chassisSpeeds.vyMetersPerSecond = -x;
+    chassisSpeeds = new ChassisSpeeds(-y, -x, z);
+
+    // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, NAVX.getRotation2d());
   }
   @Override
   public void periodic() {
@@ -87,10 +94,12 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("backleft encoder: ", backleft.getEncoder());
     SmartDashboard.putNumber("backleft wrapoffset: ", backleft.wrapoffset);
 
-    frontright.set(state[0].speedMetersPerSecond, state[0].angle.getDegrees());
-    frontleft.set(state[1].speedMetersPerSecond, state[1].angle.getDegrees());
-    backright.set(state[2].speedMetersPerSecond, state[2].angle.getDegrees());
-    backleft.set(state[3].speedMetersPerSecond, state[3].angle.getDegrees());
+    SmartDashboard.putNumber("NAVX Angle", NAVX.getAngle());
+
+    frontright.set(state[2].speedMetersPerSecond, state[2].angle.getDegrees());
+    frontleft.set(state[3].speedMetersPerSecond, state[3].angle.getDegrees());
+    backright.set(state[0].speedMetersPerSecond, state[0].angle.getDegrees());
+    backleft.set(state[1].speedMetersPerSecond, state[1].angle.getDegrees());
     //t.set(0.5);
   }
 

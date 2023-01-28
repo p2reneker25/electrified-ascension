@@ -38,7 +38,10 @@ public final class Constants {
         public static final double MAX_SPEED = 0.1;
         public static final double CHASSIS_WIDTH = 0.508;
         public static final double CHASSIS_LENGTH = 0.6223;
-
+        
+        public static final double P = 0.005;
+        public static final double I = 0.0;
+        public static final double D = 0.0;
     }
     public final class ClawConstants {
         public static final int ENCODER_TICKS = 42;
