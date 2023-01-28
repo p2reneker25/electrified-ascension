@@ -60,33 +60,37 @@ public class DriveTrain extends SubsystemBase {
   public void drive(double x, double y) {
     if (Math.abs(x) < 0.12) {x = 0;}
     if (Math.abs(y) < 0.12) {y = 0;}
-    chassisSpeeds.vxMetersPerSecond = x;
-    chassisSpeeds.vyMetersPerSecond = y;
+    chassisSpeeds.vxMetersPerSecond = -y;
+    chassisSpeeds.vyMetersPerSecond = -x;
   }
   @Override
   public void periodic() {
     SwerveModuleState[] state = kinematics.toSwerveModuleStates(chassisSpeeds);
 
     SmartDashboard.putNumber("frontright speed: ", state[0].speedMetersPerSecond);
-    SmartDashboard.putNumber("frontright angle: ", state[0].angle.getDegrees());
+    SmartDashboard.putNumber("frontright angle: ", state[0].angle.getDegrees() + frontright.offset*360);
     SmartDashboard.putNumber("frontright encoder: ", frontright.getEncoder());
+    SmartDashboard.putNumber("frontright wrapoffset: ", frontright.wrapoffset);
 
     SmartDashboard.putNumber("frontleft speed: ", state[1].speedMetersPerSecond);
-    SmartDashboard.putNumber("frontleft angle: ", state[1].angle.getDegrees());
+    SmartDashboard.putNumber("frontleft angle: ", state[1].angle.getDegrees() + frontleft.offset*360);
     SmartDashboard.putNumber("frontleft encoder: ", frontleft.getEncoder());
+    SmartDashboard.putNumber("frontleft wrapoffset: ", frontleft.wrapoffset);
 
     SmartDashboard.putNumber("backright speed: ", state[2].speedMetersPerSecond);
-    SmartDashboard.putNumber("backright angle: ", state[2].angle.getDegrees());
+    SmartDashboard.putNumber("backright angle: ", state[2].angle.getDegrees() + backright.offset*360);
     SmartDashboard.putNumber("backright encoder: ", backright.getEncoder());
+    SmartDashboard.putNumber("backright wrapoffset: ", backright.wrapoffset);
 
     SmartDashboard.putNumber("backleft speed: ", state[3].speedMetersPerSecond);
-    SmartDashboard.putNumber("backleft angle: ", state[3].angle.getDegrees());
+    SmartDashboard.putNumber("backleft angle: ", state[3].angle.getDegrees() + backleft.offset*360);
     SmartDashboard.putNumber("backleft encoder: ", backleft.getEncoder());
+    SmartDashboard.putNumber("backleft wrapoffset: ", backleft.wrapoffset);
 
-    frontright.set(state[0].speedMetersPerSecond, state[0].angle.getRadians());
-    frontleft.set(state[1].speedMetersPerSecond, state[1].angle.getRadians());
-    backright.set(state[2].speedMetersPerSecond, state[2].angle.getRadians());
-    backleft.set(state[3].speedMetersPerSecond, state[3].angle.getRadians());
+    frontright.set(state[0].speedMetersPerSecond, state[0].angle.getDegrees());
+    frontleft.set(state[1].speedMetersPerSecond, state[1].angle.getDegrees());
+    backright.set(state[2].speedMetersPerSecond, state[2].angle.getDegrees());
+    backleft.set(state[3].speedMetersPerSecond, state[3].angle.getDegrees());
     //t.set(0.5);
   }
 
