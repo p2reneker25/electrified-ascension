@@ -16,7 +16,7 @@ public class DriveModule {
     private final CANSparkMax drive;
     private final CANSparkMax steer;
     private final DutyCycleEncoder encoder;
-    public final double offset;
+    public double offset;
     private double lastoffset;
     public double wrapoffset = 0;
     public boolean firstwrap = true;
@@ -52,7 +52,17 @@ public class DriveModule {
         // }
         double mspeed = MathUtil.clamp(-pid.calculate(getEncoder(), angle), -0.2, 0.2);
         
+        double dif = pid.getPositionError();
         
+        // if (dif > 90.0) {
+        //     flipBool = !flipBool;
+        //     offset += 180.0;
+        //     System.out.println("Should Swap!");
+        // }
+        // if (flipBool) {
+        //     drivespeed = -drivespeed;
+        // }
+        // mspeed = MathUtil.clamp(-pid.calculate(getEncoder(), angle), -0.2, 0.2);
         // if (mspeed > 0.15) {
         //     mspeed = 0.15;
         // }

@@ -39,7 +39,7 @@ public final class Constants {
         public static final double CHASSIS_WIDTH = 0.508;
         public static final double CHASSIS_LENGTH = 0.6223;
         
-        public static final double P = 0.005;
+        public static final double P = 0.012;
         public static final double I = 0.0;
         public static final double D = 0.0;
     }
