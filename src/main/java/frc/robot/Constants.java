@@ -14,25 +14,25 @@ package frc.robot;
  */
 public final class Constants {
     public final class DriveConstants {
-        public static final int FRONTRIGHT_MODULE_DRIVE_CAN = 1;
-        public static final int FRONTRIGHT_MODULE_STEER_CAN = 3; 
-        public static final int FRONTRIGHT_MODULE_ENCODER = 3; 
-        public static final double FRONTRIGHT_MODULE_OFFSET = 0.31; 
+        public static final int FRONTRIGHT_MODULE_DRIVE_CAN = 3;
+        public static final int FRONTRIGHT_MODULE_STEER_CAN = 2; 
+        public static final int FRONTRIGHT_MODULE_ENCODER = 2; 
+        public static final double FRONTRIGHT_MODULE_OFFSET = 0.77; 
 
-        public static final int FRONTLEFT_MODULE_DRIVE_CAN = 10;
-        public static final int FRONTLEFT_MODULE_STEER_CAN = 5; 
-        public static final int FRONTLEFT_MODULE_ENCODER = 1; 
-        public static final double FRONTLEFT_MODULE_OFFSET = 0.7; 
+        public static final int FRONTLEFT_MODULE_DRIVE_CAN = 4;
+        public static final int FRONTLEFT_MODULE_STEER_CAN = 9; 
+        public static final int FRONTLEFT_MODULE_ENCODER = 0; 
+        public static final double FRONTLEFT_MODULE_OFFSET = 0.18; 
 
-        public static final int BACKRIGHT_MODULE_DRIVE_CAN = 2;
-        public static final int BACKRIGHT_MODULE_STEER_CAN = 9; 
-        public static final int BACKRIGHT_MODULE_ENCODER = 2; 
-        public static final double BACKRIGHT_MODULE_OFFSET = 0.17; 
+        public static final int BACKRIGHT_MODULE_DRIVE_CAN = 8;
+        public static final int BACKRIGHT_MODULE_STEER_CAN = 5; 
+        public static final int BACKRIGHT_MODULE_ENCODER = 3; 
+        public static final double BACKRIGHT_MODULE_OFFSET = 0.69; 
 
-        public static final int BACKLEFT_MODULE_DRIVE_CAN = 4;
-        public static final int BACKLEFT_MODULE_STEER_CAN = 8; 
-        public static final int BACKLEFT_MODULE_ENCODER = 0; 
-        public static final double BACKLEFT_MODULE_OFFSET = 0.26; 
+        public static final int BACKLEFT_MODULE_DRIVE_CAN = 10;
+        public static final int BACKLEFT_MODULE_STEER_CAN = 1; 
+        public static final int BACKLEFT_MODULE_ENCODER = 1; 
+        public static final double BACKLEFT_MODULE_OFFSET = 0.8; 
 
 
         public static final double MAX_SPEED = 0.1;
@@ -50,5 +50,11 @@ public final class Constants {
     }
     public final class ButtonConstants {
         public static final int BUTTON_WRIST = 2;
+        public static final int BUTTON_ARM_EXTEND = 3; 
+        public static final int BUTTON_ARM_RETRACT = 4; 
+    }
+    public final class ArmConstants {
+        public static final int EXTEND_MOTOR_CAN = 11;
+        
     }
 }

@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
 import edu.wpi.first.hal.EncoderJNI;
 import edu.wpi.first.math.MathUtil;
@@ -15,15 +16,16 @@ import frc.robot.Constants.DriveConstants;
 public class DriveModule {
     private final CANSparkMax drive;
     private final CANSparkMax steer;
-    private final DutyCycleEncoder encoder;
-    public double offset;
+    public final DutyCycleEncoder encoder;
+    public final double offset;
     private double lastoffset;
     public double wrapoffset = 0;
     public boolean firstwrap = true;
     public boolean stopped = false;
     public double flip = 0;
     public boolean flipBool = false;
-    PIDController pid;
+    public double steerOffset = 0;
+    public PIDController pid;
     public DriveModule(
         int DRIVE_CAN,
         int STEER_CAN,
@@ -34,14 +36,22 @@ public class DriveModule {
         steer = new CANSparkMax(STEER_CAN, MotorType.kBrushless);
         encoder = new DutyCycleEncoder(new DigitalInput(ENCODER_DIO));
         offset = OFFSET;
-        lastoffset = encoder.getAbsolutePosition();
-        wrapoffset = 0;
-        pid = new PIDController(DriveConstants.P, DriveConstants.I, DriveConstants.D);
+          pid = new PIDController(DriveConstants.P, DriveConstants.I, DriveConstants.D);
         //pid.setTolerance(16);
         // pid.setTolerance(16, 1);
+        steerOffset = getNEOEncoder();
         pid.enableContinuousInput(0, 360);
     }
-    public void set(double drivespeed, double angle) {
+    public void stop() {
+        drive.set(0);
+        steer.set(0);
+
+    }
+    public double getNEOEncoder() {
+        System.out.println(steer.getEncoder().getCountsPerRevolution());
+        return (steer.getEncoder().getPosition() * 60.0) - steerOffset;
+    }
+    public void set(double drivespeed, double angle, boolean flipPID) {
         // pid.setP(SmartDashboard.getNumber("P", DriveConstants.P));
         // pid.setI(SmartDashboard.getNumber("I", DriveConstants.I));
         // pid.setD(SmartDashboard.getNumber("D", DriveConstants.D));
@@ -50,7 +60,10 @@ public class DriveModule {
         //     flip+=1;
         //     if (flipBool) {flipBool = false; } else {flipBool = }
         // }
-        double mspeed = MathUtil.clamp(-pid.calculate(getEncoder(), angle), -0.2, 0.2);
+        double flip = -1;
+        if (flipPID == true) {flip = 1;}
+        
+        double mspeed = MathUtil.clamp(pid.calculate(getEncoder(), angle) * flip, -0.2, 0.2);
         
         double dif = pid.getPositionError();
         
@@ -100,6 +113,6 @@ public class DriveModule {
         //     wrapoffset -= (enc-lastoffset);
         // }
         // lastoffset = enc;
-        return (encoder.getAbsolutePosition()) * 360.0;
+        return (encoder.getAbsolutePosition() * 360.0);
     }
 }
