@@ -50,8 +50,8 @@ public final class Constants {
     }
     public final class ButtonConstants {
         public static final int BUTTON_WRIST = 2;
-        public static final int BUTTON_ARM_EXTEND = 3; 
-        public static final int BUTTON_ARM_RETRACT = 4; 
+        public static final int BUTTON_ARM_EXTEND = 1; 
+        public static final int BUTTON_ARM_RETRACT = 2; 
     }
     public final class ArmConstants {
         public static final int EXTEND_MOTOR_CAN = 11;

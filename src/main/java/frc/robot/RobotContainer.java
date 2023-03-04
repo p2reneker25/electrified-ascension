@@ -52,8 +52,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //b_turnWrist.onTrue(new TurnWrist(wrist));
     drivetrain.setDefaultCommand(new DriveCommand(drivetrain, joystick));
-    b_armExtend.onTrue(new ExtendArm(arm,0.1));
-    b_armRetract.onTrue(new ExtendArm(arm,-0.1));
+    b_armExtend.whileTrue(new ExtendArm(arm,0.1));
+    b_armRetract.whileTrue(new ExtendArm(arm,-0.1));
   }
 
   /**
