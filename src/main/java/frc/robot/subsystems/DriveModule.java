@@ -48,7 +48,7 @@ public class DriveModule {
 
     }
     public double getNEOEncoder() {
-        System.out.println(steer.getEncoder().getCountsPerRevolution());
+        // System.out.println(steer.getEncoder().getCountsPerRevolution());
         return (steer.getEncoder().getPosition() * 60.0) - steerOffset;
     }
     public void set(double drivespeed, double angle, boolean flipPID) {
