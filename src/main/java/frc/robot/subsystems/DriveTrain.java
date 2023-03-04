@@ -63,11 +63,11 @@ public class DriveTrain extends SubsystemBase {
       chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
   }
   public void drive(double x, double y, double z) {
-    if (Math.abs(x) < 0.12) {x = 0;}
-    if (Math.abs(y) < 0.12) {y = 0;}
-    if (Math.abs(z) < 0.15) {z = 0;}
-    // chassisSpeeds.vxMetersPerSecond = -y;
-    // chassisSpeeds.vyMetersPerSecond = -x;
+    if (Math.abs(x) < 0.2) {x = 0;}
+    if (Math.abs(y) < 0.2) {y = 0;}
+    if (Math.abs(z) < 0.2) {z = 0;}
+    chassisSpeeds.vxMetersPerSecond = y;
+    chassisSpeeds.vyMetersPerSecond = x;
     chassisSpeeds = new ChassisSpeeds(y, x, z);
 
     // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, NAVX.getRotation2d());
