@@ -12,6 +12,7 @@ import frc.robot.commands.ExtendArm;
 import frc.robot.commands.TurnWrist;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Wrist;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -27,6 +28,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveTrain drivetrain = new DriveTrain();
   //private final Wrist wrist = new Wrist();
+  private final Vision vision = new Vision();
   private final Arm arm = new Arm();
   private final Joystick joystick;
   private final JoystickButton b_armExtend;
