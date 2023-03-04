@@ -65,7 +65,17 @@ public class DriveModule {
         
         double mspeed = MathUtil.clamp(pid.calculate(getEncoder(), angle) * flip, -0.2, 0.2);
         
+        double dif = pid.getPositionError();
         
+        // if (dif > 90.0) {
+        //     flipBool = !flipBool;
+        //     offset += 180.0;
+        //     System.out.println("Should Swap!");
+        // }
+        // if (flipBool) {
+        //     drivespeed = -drivespeed;
+        // }
+        // mspeed = MathUtil.clamp(-pid.calculate(getEncoder(), angle), -0.2, 0.2);
         // if (mspeed > 0.15) {
         //     mspeed = 0.15;
         // }
