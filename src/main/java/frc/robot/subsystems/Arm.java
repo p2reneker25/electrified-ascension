@@ -1,4 +1,5 @@
 package frc.robot.subsystems;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
@@ -17,6 +18,7 @@ public class Arm extends SubsystemBase{
         extendMotor = new CANSparkMax(ArmConstants.EXTEND_MOTOR_CAN, MotorType.kBrushless);
         offset = getEncoder();
         talon = new TalonFX(Constants.ArmConstants.PIVOT_CAN);
+        talon.setNeutralMode(NeutralMode.Brake);
     }
     public void setExtendSpeed(double speed){
         extendMotor.set(speed);

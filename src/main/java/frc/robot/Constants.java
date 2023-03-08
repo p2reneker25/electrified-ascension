@@ -63,5 +63,7 @@ public final class Constants {
         public static final int EXTEND_MOTOR_CAN = 11;
         public static final int ARM_PWM = 0;
         public static final int PIVOT_CAN = 12;
+
+        public static final double ARM_SPEED = 0.15;
     }
 }  

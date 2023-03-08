@@ -67,8 +67,8 @@ public class RobotContainer {
     //b_turnWrist.onTrue(new TurnWrist(wrist));
     arm_backwards.whileTrue(new ArmBackward(arm));
     arm_forwards.whileTrue(new ArmForward(arm));
-    arm_up.whileTrue(new PivotArm(arm,0.15));
-    arm_down.whileTrue(new PivotArm(arm,-0.15));
+    arm_up.whileTrue(new PivotArm(arm, Constants.ArmConstants.ARM_SPEED));
+    arm_down.whileTrue(new PivotArm(arm,-Constants.ArmConstants.ARM_SPEED * 0.5));
     drivetrain.setDefaultCommand(new DriveCommand(drivetrain, joystick));
     b_armExtend.whileTrue(new ExtendArm(arm,0.1));
     b_armRetract.whileTrue(new ExtendArm(arm,-0.1));

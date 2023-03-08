@@ -23,6 +23,7 @@ public class Vision extends SubsystemBase {
         SmartDashboard.putNumber("robot x", botpose.getX());
         SmartDashboard.putNumber("robot y", botpose.getY());
         SmartDashboard.putNumber("robot angle", botpose.getRotation().getDegrees());
+        SmartDashboard.putBoolean("limelight found: ", limelight.containsKey("botpose"));
     }  
     public Transform2d getBotPose() {
         Transform2d t;
