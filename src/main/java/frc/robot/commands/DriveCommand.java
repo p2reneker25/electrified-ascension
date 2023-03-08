@@ -29,7 +29,7 @@ public class DriveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drive.drive(joystick.getX(), joystick.getY());
+    drive.drive(joystick.getX(), joystick.getY(), joystick.getZ());
   }
 
   // Called once the command ends or is interrupted.
