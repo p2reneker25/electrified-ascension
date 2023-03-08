@@ -50,11 +50,18 @@ public final class Constants {
     }
     public final class ButtonConstants {
         public static final int BUTTON_WRIST = 2;
+        public static final int BUTTON_ARMFORWARD = 3;
+        public static final int BUTTON_ARMBACKWARD = 4;
+        public static final int BUTTON_ARMUP = 5;
+        public static final int BUTTON_ARMDOWN = 6;
+
         public static final int BUTTON_ARM_EXTEND = 1; 
         public static final int BUTTON_ARM_RETRACT = 2; 
     }
+   
     public final class ArmConstants {
         public static final int EXTEND_MOTOR_CAN = 11;
-        
+        public static final int ARM_PWM = 0;
+        public static final int PIVOT_CAN = 12;
     }
-}
+}  

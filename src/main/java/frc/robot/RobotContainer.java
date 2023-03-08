@@ -7,8 +7,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.ArmBackward;
+import frc.robot.commands.ArmForward;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ExtendArm;
+import frc.robot.commands.PivotArm;
 import frc.robot.commands.TurnWrist;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DriveTrain;
@@ -34,6 +37,10 @@ public class RobotContainer {
   private final JoystickButton b_armExtend;
   private final JoystickButton b_armRetract;
   //private final JoystickButton b_turnWrist;
+  private final JoystickButton arm_backwards;
+  private final JoystickButton arm_up;
+  private final JoystickButton arm_down;
+  private final JoystickButton arm_forwards;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -42,6 +49,11 @@ public class RobotContainer {
     b_armExtend = new JoystickButton(joystick, ButtonConstants.BUTTON_ARM_EXTEND);
     b_armRetract = new JoystickButton(joystick, ButtonConstants.BUTTON_ARM_RETRACT);
     //b_turnWrist = new JoystickButton(joystick, Constants.ButtonConstants.BUTTON_WRIST);
+    arm_backwards = new JoystickButton(joystick, Constants.ButtonConstants.BUTTON_ARMBACKWARD);
+    arm_forwards = new JoystickButton(joystick, Constants.ButtonConstants.BUTTON_ARMFORWARD);
+    arm_up = new JoystickButton(joystick, Constants.ButtonConstants.BUTTON_ARMUP);
+    arm_down = new JoystickButton(joystick, Constants.ButtonConstants.BUTTON_ARMDOWN);
+    
     configureButtonBindings();
   }
 
@@ -53,6 +65,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //b_turnWrist.onTrue(new TurnWrist(wrist));
+    arm_backwards.whileTrue(new ArmBackward(arm));
+    arm_forwards.whileTrue(new ArmForward(arm));
+    arm_up.whileTrue(new PivotArm(arm,0.15));
+    arm_down.whileTrue(new PivotArm(arm,-0.15));
     drivetrain.setDefaultCommand(new DriveCommand(drivetrain, joystick));
     b_armExtend.whileTrue(new ExtendArm(arm,0.1));
     b_armRetract.whileTrue(new ExtendArm(arm,-0.1));
