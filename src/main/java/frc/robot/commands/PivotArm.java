@@ -13,10 +13,10 @@ public class PivotArm extends CommandBase {
     public void initialize(){}
 
     public void execute(){
-        arm.setPivot(speed);
+        arm.setPivotSpeed(speed);
     }
     public void end(boolean interrupted){
-        arm.setPivot(0);
+        arm.setPivotSpeed(0);
         
     }
     public boolean isFinished(){return false;}
