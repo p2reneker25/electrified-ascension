@@ -9,9 +9,11 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ExtendArm;
+import frc.robot.commands.PositionRobot;
 import frc.robot.commands.TurnWrist;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Wrist;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -26,19 +28,23 @@ import frc.robot.Constants.ButtonConstants;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveTrain drivetrain = new DriveTrain();
-  //private final Wrist wrist = new Wrist();
+  private final Vision vision = new Vision();
   private final Arm arm = new Arm();
   private final Joystick joystick;
-  private final JoystickButton b_armExtend;
-  private final JoystickButton b_armRetract;
+  // private final JoystickButton b_armExtend;
+  // private final JoystickButton b_armRetract;
+
+  private final JoystickButton b_positionrobot;
+  // private final JoystickButton b_break;
   //private final JoystickButton b_turnWrist;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     joystick = new Joystick(0);
-    b_armExtend = new JoystickButton(joystick, ButtonConstants.BUTTON_ARM_EXTEND);
-    b_armRetract = new JoystickButton(joystick, ButtonConstants.BUTTON_ARM_RETRACT);
+    // b_armExtend = new JoystickButton(joystick, ButtonConstants.BUTTON_ARM_EXTEND);
+    // b_armRetract = new JoystickButton(joystick, ButtonConstants.BUTTON_ARM_RETRACT);
+    b_positionrobot = new JoystickButton(joystick, ButtonConstants.BUTTON_POSITION);
     //b_turnWrist = new JoystickButton(joystick, Constants.ButtonConstants.BUTTON_WRIST);
     configureButtonBindings();
   }
@@ -52,8 +58,9 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //b_turnWrist.onTrue(new TurnWrist(wrist));
     drivetrain.setDefaultCommand(new DriveCommand(drivetrain, joystick));
-    b_armExtend.whileTrue(new ExtendArm(arm,0.1));
-    b_armRetract.whileTrue(new ExtendArm(arm,-0.1));
+    b_positionrobot.whileTrue(new PositionRobot(drivetrain, vision));
+    // b_armExtend.whileTrue(new ExtendArm(arm,0.1));
+    // b_armRetract.whileTrue(new ExtendArm(arm,-0.1));
   }
 
   /**

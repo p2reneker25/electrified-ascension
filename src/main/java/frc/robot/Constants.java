@@ -52,9 +52,11 @@ public final class Constants {
         public static final int BUTTON_WRIST = 2;
         public static final int BUTTON_ARM_EXTEND = 1; 
         public static final int BUTTON_ARM_RETRACT = 2; 
+        public static final int BUTTON_POSITION = 2;
     }
     public final class ArmConstants {
         public static final int EXTEND_MOTOR_CAN = 11;
-        
+        public static final int BRAKE_1 = 1;
+        public static final int BRAKE_2 = 2;
     }
 }

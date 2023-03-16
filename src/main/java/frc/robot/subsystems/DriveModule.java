@@ -100,6 +100,9 @@ public class DriveModule {
         
         drive.set(drivespeed * 0.5);
     }
+    public double getDriveEncoder() {
+        return drive.getEncoder().getPosition();
+    }
     public double getEncoder() {
         // if (firstwrap) {
         //     double enc = encoder.getAbsolutePosition();
