@@ -7,9 +7,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.ArmBackward;
+import frc.robot.commands.ArmForward;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ExtendArm;
 import frc.robot.commands.PositionRobot;
+import frc.robot.commands.PivotArm;
 import frc.robot.commands.TurnWrist;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DriveTrain;
@@ -28,6 +31,7 @@ import frc.robot.Constants.ButtonConstants;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveTrain drivetrain = new DriveTrain();
+  //private final Wrist wrist = new Wrist();
   private final Vision vision = new Vision();
   private final Arm arm = new Arm();
   private final Joystick joystick;
@@ -37,6 +41,10 @@ public class RobotContainer {
   private final JoystickButton b_positionrobot;
   // private final JoystickButton b_break;
   //private final JoystickButton b_turnWrist;
+  private final JoystickButton arm_backwards;
+  private final JoystickButton arm_up;
+  private final JoystickButton arm_down;
+  private final JoystickButton arm_forwards;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -46,6 +54,11 @@ public class RobotContainer {
     // b_armRetract = new JoystickButton(joystick, ButtonConstants.BUTTON_ARM_RETRACT);
     b_positionrobot = new JoystickButton(joystick, ButtonConstants.BUTTON_POSITION);
     //b_turnWrist = new JoystickButton(joystick, Constants.ButtonConstants.BUTTON_WRIST);
+    arm_backwards = new JoystickButton(joystick, Constants.ButtonConstants.BUTTON_ARMBACKWARD);
+    arm_forwards = new JoystickButton(joystick, Constants.ButtonConstants.BUTTON_ARMFORWARD);
+    arm_up = new JoystickButton(joystick, Constants.ButtonConstants.BUTTON_ARMUP);
+    arm_down = new JoystickButton(joystick, Constants.ButtonConstants.BUTTON_ARMDOWN);
+    
     configureButtonBindings();
   }
 
@@ -57,6 +70,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //b_turnWrist.onTrue(new TurnWrist(wrist));
+    arm_backwards.whileTrue(new ArmBackward(arm));
+    arm_forwards.whileTrue(new ArmForward(arm));
+    arm_up.whileTrue(new PivotArm(arm, Constants.ArmConstants.ARM_SPEED));
+    arm_down.whileTrue(new PivotArm(arm,-Constants.ArmConstants.ARM_SPEED * 0.5));
     drivetrain.setDefaultCommand(new DriveCommand(drivetrain, joystick));
     b_positionrobot.whileTrue(new PositionRobot(drivetrain, vision));
     // b_armExtend.whileTrue(new ExtendArm(arm,0.1));
