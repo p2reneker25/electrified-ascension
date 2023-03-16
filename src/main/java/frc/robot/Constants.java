@@ -64,4 +64,7 @@ public final class Constants {
         public static final int ARM_PWM = 0;
         public static final int PIVOT_CAN = 12;
     }
+    public final class HandConstants {
+        public static final int HAND_MOTOR_PWM = 1;
+    }
 }  
