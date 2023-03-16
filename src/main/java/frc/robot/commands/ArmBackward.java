@@ -13,10 +13,10 @@ public class ArmBackward extends CommandBase{
     public void initialize(){}
 
     public void execute(){
-        armMotor.setMotor(-0.3);
+        armMotor.setExtendSpeed(-0.3);
     }
     public void end(boolean interrupted){
-        armMotor.setMotor(0);
+        armMotor.setExtendSpeed(0);
         
     }
     public boolean isFinished(){return false;}
