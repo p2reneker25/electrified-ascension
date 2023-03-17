@@ -71,5 +71,8 @@ public final class Constants {
     }
     public final class HandConstants {
         public static final int HAND_MOTOR_PWM = 1;
+        public static final int HAND_CYLINDER_UP = 0;
+        public static final int HAND_CYLINDER_DOWN = 1;
     }
+    
 }  
