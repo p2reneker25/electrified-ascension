@@ -69,4 +69,7 @@ public final class Constants {
 
         public static final double ARM_SPEED = 0.15;
     }
+    public final class HandConstants {
+        public static final int HAND_MOTOR_PWM = 1;
+    }
 }  

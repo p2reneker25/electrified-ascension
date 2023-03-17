@@ -1,24 +1,24 @@
 package frc.robot.commands;
-import frc.robot.subsystems.*;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
-public class PivotArm extends CommandBase {
+import frc.robot.subsystems.Hand;
+
+public class HandGrab extends CommandBase {
     
+    private Hand handMotor;
     
-    private Arm arm;
-    private double speed;
-    public PivotArm(Arm a,double s){
-        arm = a;
-        speed = s;
+    public HandGrab(Hand h){
+        handMotor = h;
     }
     @Override
     public void initialize(){}
     @Override
     public void execute(){
-        arm.setPivotSpeed(-speed);
+        handMotor.setHandSpeed(0.5);
     }
     @Override
     public void end(boolean interrupted){
-        arm.setPivotSpeed(0);
+        handMotor.setHandSpeed(0);
         
     }
     @Override
