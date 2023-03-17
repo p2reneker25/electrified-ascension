@@ -57,12 +57,17 @@ public final class Constants {
 
         public static final int BUTTON_ARM_EXTEND = 1; 
         public static final int BUTTON_ARM_RETRACT = 2; 
+        public static final int BUTTON_POSITION = 2;
     }
    
     public final class ArmConstants {
         public static final int EXTEND_MOTOR_CAN = 11;
+        public static final int BRAKE_1 = 1;
+        public static final int BRAKE_2 = 2;
         public static final int ARM_PWM = 0;
         public static final int PIVOT_CAN = 12;
+
+        public static final double ARM_SPEED = 0.15;
     }
     public final class HandConstants {
         public static final int HAND_MOTOR_PWM = 1;

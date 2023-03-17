@@ -14,7 +14,7 @@ public class PivotArm extends CommandBase {
     public void initialize(){}
     @Override
     public void execute(){
-        arm.setPivotSpeed(speed);
+        arm.setPivotSpeed(-speed);
     }
     @Override
     public void end(boolean interrupted){

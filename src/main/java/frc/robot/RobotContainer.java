@@ -11,6 +11,7 @@ import frc.robot.commands.ArmBackward;
 import frc.robot.commands.ArmForward;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ExtendArm;
+import frc.robot.commands.PositionRobot;
 import frc.robot.commands.PivotArm;
 import frc.robot.commands.TurnWrist;
 import frc.robot.subsystems.Arm;
@@ -34,8 +35,11 @@ public class RobotContainer {
   private final Vision vision = new Vision();
   private final Arm arm = new Arm();
   private final Joystick joystick;
-  private final JoystickButton b_armExtend;
-  private final JoystickButton b_armRetract;
+  // private final JoystickButton b_armExtend;
+  // private final JoystickButton b_armRetract;
+
+  private final JoystickButton b_positionrobot;
+  // private final JoystickButton b_break;
   //private final JoystickButton b_turnWrist;
   private final JoystickButton arm_backwards;
   private final JoystickButton arm_up;
@@ -46,8 +50,9 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     joystick = new Joystick(0);
-    b_armExtend = new JoystickButton(joystick, ButtonConstants.BUTTON_ARM_EXTEND);
-    b_armRetract = new JoystickButton(joystick, ButtonConstants.BUTTON_ARM_RETRACT);
+    // b_armExtend = new JoystickButton(joystick, ButtonConstants.BUTTON_ARM_EXTEND);
+    // b_armRetract = new JoystickButton(joystick, ButtonConstants.BUTTON_ARM_RETRACT);
+    b_positionrobot = new JoystickButton(joystick, ButtonConstants.BUTTON_POSITION);
     //b_turnWrist = new JoystickButton(joystick, Constants.ButtonConstants.BUTTON_WRIST);
     arm_backwards = new JoystickButton(joystick, Constants.ButtonConstants.BUTTON_ARMBACKWARD);
     arm_forwards = new JoystickButton(joystick, Constants.ButtonConstants.BUTTON_ARMFORWARD);
@@ -67,11 +72,12 @@ public class RobotContainer {
     //b_turnWrist.onTrue(new TurnWrist(wrist));
     arm_backwards.whileTrue(new ArmBackward(arm));
     arm_forwards.whileTrue(new ArmForward(arm));
-    arm_up.whileTrue(new PivotArm(arm,0.15));
-    arm_down.whileTrue(new PivotArm(arm,-0.15));
+    arm_up.whileTrue(new PivotArm(arm, Constants.ArmConstants.ARM_SPEED));
+    arm_down.whileTrue(new PivotArm(arm,-Constants.ArmConstants.ARM_SPEED * 0.5));
     drivetrain.setDefaultCommand(new DriveCommand(drivetrain, joystick));
-    b_armExtend.whileTrue(new ExtendArm(arm,0.1));
-    b_armRetract.whileTrue(new ExtendArm(arm,-0.1));
+    b_positionrobot.whileTrue(new PositionRobot(drivetrain, vision));
+    // b_armExtend.whileTrue(new ExtendArm(arm,0.1));
+    // b_armRetract.whileTrue(new ExtendArm(arm,-0.1));
   }
 
   /**
