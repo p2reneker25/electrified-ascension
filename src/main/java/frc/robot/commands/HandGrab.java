@@ -6,15 +6,16 @@ import frc.robot.subsystems.Hand;
 public class HandGrab extends CommandBase {
     
     private Hand handMotor;
-    
-    public HandGrab(Hand h){
+    private double speed;
+    public HandGrab(Hand h, double s){
         handMotor = h;
+        speed = s;
     }
     @Override
     public void initialize(){}
     @Override
     public void execute(){
-        handMotor.setHandSpeed(0.5);
+        handMotor.setHandSpeed(speed);
     }
     @Override
     public void end(boolean interrupted){

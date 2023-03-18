@@ -54,6 +54,10 @@ public final class Constants {
         public static final int BUTTON_ARMBACKWARD = 4;
         public static final int BUTTON_ARMUP = 5;
         public static final int BUTTON_ARMDOWN = 6;
+        public static final int BUTTON_HAND_LETGO = 11;
+        public static final int BUTTON_HAND_HOLD = 12;
+        public static final int BUTTON_HAND_OPEN = 9;
+        public static final int BUTTON_HAND_CLOSE = 10;
 
         public static final int BUTTON_ARM_EXTEND = 1; 
         public static final int BUTTON_ARM_RETRACT = 2; 
