@@ -10,6 +10,7 @@ public class HandGrab extends CommandBase {
     public HandGrab(Hand h, double s){
         handMotor = h;
         speed = s;
+
     }
     @Override
     public void initialize(){}
