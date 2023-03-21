@@ -17,10 +17,12 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
-
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 public class DriveTrain extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
@@ -32,6 +34,7 @@ public class DriveTrain extends SubsystemBase {
 
   public boolean autoMode = false;
   public AHRS NAVX = new AHRS(I2C.Port.kOnboard);
+  public Accelerometer accelerometer = new BuiltInAccelerometer();
   private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
       new Translation2d(-DriveConstants.CHASSIS_WIDTH / 2,DriveConstants.CHASSIS_LENGTH / 2), 
       new Translation2d(-DriveConstants.CHASSIS_WIDTH/2,-DriveConstants.CHASSIS_LENGTH/2),

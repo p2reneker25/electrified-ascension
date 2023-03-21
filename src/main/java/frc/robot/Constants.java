@@ -74,7 +74,7 @@ public final class Constants {
         public static final double ARM_SPEED = 0.15;
     }
     public final class HandConstants {
-        public static final int HAND_MOTOR_PWM = 1;
+        public static final int HAND_MOTOR_CAN = 13;
 
         public static final int HAND_CYLINDER_UP = 0;
         public static final int HAND_CYLINDER_DOWN = 1;
