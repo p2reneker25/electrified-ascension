@@ -58,26 +58,26 @@ public final class Constants {
         public static final int BUTTON_HAND_HOLD = 12;
         public static final int BUTTON_HAND_OPEN = 9;
         public static final int BUTTON_HAND_CLOSE = 10;
-
-        public static final int BUTTON_ARM_EXTEND = 1; 
-        public static final int BUTTON_ARM_RETRACT = 2; 
+        public static final int BUTTON_BRAKE = 7;
+        // public static final int BUTTON_ARM_EXTEND = 1; 
+        // public static final int BUTTON_ARM_RETRACT = 2; 
         public static final int BUTTON_POSITION = 2;
     }
    
     public final class ArmConstants {
         public static final int EXTEND_MOTOR_CAN = 11;
-        public static final int BRAKE_1 = 1;
-        public static final int BRAKE_2 = 2;
+        public static final int BRAKE_1 = 0;
+        public static final int BRAKE_2 = 4;
         public static final int ARM_PWM = 0;
         public static final int PIVOT_CAN = 12;
 
-        public static final double ARM_SPEED = 0.15;
+        public static final double ARM_SPEED = 0.30;
     }
     public final class HandConstants {
         public static final int HAND_MOTOR_PWM = 1;
 
-        public static final int HAND_CYLINDER_UP = 0;
-        public static final int HAND_CYLINDER_DOWN = 1;
+        public static final int HAND_CYLINDER_UP = 2;
+        public static final int HAND_CYLINDER_DOWN = 3;
     }
     
 

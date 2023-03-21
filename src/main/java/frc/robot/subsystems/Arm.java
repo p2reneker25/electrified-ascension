@@ -10,6 +10,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -18,6 +19,8 @@ public class Arm extends SubsystemBase{
     CANSparkMax extendMotor;
     DoubleSolenoid brake;
     double offset = 0;
+    Timer timer = new Timer();
+    boolean brakeCylenderEngaged = false;
     public Arm(){
         extendMotor = new CANSparkMax(ArmConstants.EXTEND_MOTOR_CAN, MotorType.kBrushless);
         brake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ArmConstants.BRAKE_1, ArmConstants.BRAKE_2);
@@ -37,8 +40,20 @@ public class Arm extends SubsystemBase{
     public void setBrake(Value v) {
         brake.set(v);
     }
+    public void engageBrake(Value v) {
+        setBrake(v);
+
+        brakeCylenderEngaged = true;
+        timer.reset();
+        timer.start();
+    }
     @Override
     public void periodic() {
+        if (timer.get() > 0.5) {
+            timer.stop();
+            brakeCylenderEngaged = false;
+            setBrake(Value.kOff);
+        }
         SmartDashboard.putNumber("ARM ENCODER", getEncoder());
     }
 }

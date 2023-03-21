@@ -28,6 +28,7 @@ public class Hand {
 
     public void setHandCylinder(Value v){
         handSolonoid.set(v);
+        System.out.println("cylinder moved");
     }
 
 

@@ -11,17 +11,21 @@ public class Brake extends CommandBase{
     private Timer t;
     public Brake(Arm ar) {
         arm = ar;
+        t = new Timer();
     }
     @Override
     public void initialize() {
         brakeEngaged = !brakeEngaged;
         if (brakeEngaged) {
             arm.setBrake(Value.kForward);
+            System.out.println("brake open");
         }else {
+            System.out.println("brake close");
             arm.setBrake(Value.kReverse);
         }
         t.reset();
         t.start();
+        
     }
   
     // Called every time the scheduler runs while the command is scheduled.

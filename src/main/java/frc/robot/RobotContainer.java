@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.commands.ArmBackward;
 import frc.robot.commands.ArmForward;
+import frc.robot.commands.Brake;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ExtendArm;
 import frc.robot.commands.HandCylinder;
@@ -44,7 +45,7 @@ public class RobotContainer {
   // private final JoystickButton b_armRetract;
 
   private final JoystickButton b_positionrobot;
-  // private final JoystickButton b_break;
+   private final JoystickButton b_break;
   //private final JoystickButton b_turnWrist;
   private final JoystickButton arm_backwards;
   private final JoystickButton arm_up;
@@ -71,7 +72,7 @@ public class RobotContainer {
     arm_forwards = new JoystickButton(joystick, Constants.ButtonConstants.BUTTON_ARMFORWARD);
     arm_up = new JoystickButton(joystick, Constants.ButtonConstants.BUTTON_ARMUP);
     arm_down = new JoystickButton(joystick, Constants.ButtonConstants.BUTTON_ARMDOWN);
-    
+    b_break  = new JoystickButton(joystick, Constants.ButtonConstants.BUTTON_BRAKE);
     configureButtonBindings();
   }
 
@@ -93,6 +94,7 @@ public class RobotContainer {
     arm_down.whileTrue(new PivotArm(arm,-Constants.ArmConstants.ARM_SPEED * 0.5));
     drivetrain.setDefaultCommand(new DriveCommand(drivetrain, joystick));
     b_positionrobot.whileTrue(new PositionRobot(drivetrain, vision));
+    b_break.whileTrue(new Brake(arm));
     // b_armExtend.whileTrue(new ExtendArm(arm,0.1));
     // b_armRetract.whileTrue(new ExtendArm(arm,-0.1));
   }
