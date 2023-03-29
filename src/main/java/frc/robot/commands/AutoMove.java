@@ -2,21 +2,23 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.*;
 
-public class ArmBackward extends CommandBase{
+public class AutoMove extends CommandBase{
     
     
-    private Arm armMotor;
+    private DriveTrain drive;
     
-    public ArmBackward(Arm a){
-        armMotor = a;
+    public AutoMove(DriveTrain a){
+        drive = a;
     }
-    public void initialize(){}
+    public void initialize(){
+
+    }
 
     public void execute(){
-        armMotor.setExtendSpeed(0.55);
+        
     }
     public void end(boolean interrupted){
-        armMotor.setExtendSpeed(0);
+        // armMotor.setExtendSpeed(0);
         
     }
     public boolean isFinished(){return false;}

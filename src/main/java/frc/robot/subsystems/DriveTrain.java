@@ -11,29 +11,38 @@ import com.swervedrivespecialties.swervelib.SwerveModule;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 public class DriveTrain extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
-  private final DriveModule frontright;
-  private final DriveModule frontleft;
-  private final DriveModule backright;
-  private final DriveModule backleft;
+  public final DriveModule frontright;
+  public final DriveModule frontleft;
+  public final DriveModule backright;
+  public final DriveModule backleft;
+  DoubleLogEntry encoderLog;
   private ChassisSpeeds chassisSpeeds;
 
   public boolean autoMode = false;
+  public int hatValue = 0;
   public AHRS NAVX = new AHRS(I2C.Port.kOnboard);
+
   public Accelerometer accelerometer = new BuiltInAccelerometer();
   private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
       new Translation2d(-DriveConstants.CHASSIS_WIDTH / 2,DriveConstants.CHASSIS_LENGTH / 2), 
@@ -77,16 +86,23 @@ public class DriveTrain extends SubsystemBase {
     }, new Pose2d(0,0, new Rotation2d())
   );
       chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
+
+
+      
+      DataLogManager.start();
+      DriverStation.startDataLog(DataLogManager.getLog());
+      DataLog log = DataLogManager.getLog();
+      encoderLog = new DoubleLogEntry(log, "encoder values");
   }
-  public void drive(double x, double y, double z) {
+  public void drive(double x, double y, double z, int hat) {
     if (autoMode) {return;}
-    if (Math.abs(x) < 0.2) {x = 0;}
-    if (Math.abs(y) < 0.2) {y = 0;}
-    if (Math.abs(z) < 0.2) {z = 0;}
+    if (Math.abs(x) < 0.07) {x = 0;}
+    if (Math.abs(y) < 0.07) {y = 0;}
+    if (Math.abs(z) < 0.07) {z = 0;}
     chassisSpeeds.vxMetersPerSecond = y;
     chassisSpeeds.vyMetersPerSecond = x;
     chassisSpeeds = new ChassisSpeeds(y, x, z);
-
+    hatValue = hat;
     // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, NAVX.getRotation2d());
   }
   public void driveAuto(double x, double y, double z) {
@@ -127,9 +143,12 @@ public class DriveTrain extends SubsystemBase {
     targetAngle = clampToAngle(targetAngle);
     return new SwerveModuleState(targetSpeed, Rotation2d.fromDegrees(targetAngle));
   }
-
+  public Translation3d getAccelerometer() {
+    return new Translation3d(accelerometer.getX(), accelerometer.getY(), accelerometer.getZ());
+  }
   @Override
   public void periodic() {
+    
     SwerveModuleState[] state = kinematics.toSwerveModuleStates(chassisSpeeds);
     // state[0] = SwerveModuleState.optimize(state[0], new Rotation2d(backright.getNEOEncoder() * (3.14/180.0)));
     // state[1] = SwerveModuleState.optimize(state[1], new Rotation2d(backleft.getNEOEncoder() * (3.14/180.0)));
@@ -147,31 +166,45 @@ public class DriveTrain extends SubsystemBase {
     //     }
     SmartDashboard.putNumber("frontright speed: ", state[0].speedMetersPerSecond);
     SmartDashboard.putNumber("frontright angle: ", state[0].angle.getDegrees());
-    SmartDashboard.putNumber("frontright encoder: ", frontright.getNEOEncoder());
-    SmartDashboard.putNumber("frontright wrapoffset: ", frontright.wrapoffset);
+    SmartDashboard.putNumber("frontright encoder: ", frontright.getDriveEncoder());
+    SmartDashboard.putNumber("frontright current", frontright.drive.getOutputCurrent());
 
     SmartDashboard.putNumber("frontleft speed: ", state[1].speedMetersPerSecond);
     SmartDashboard.putNumber("frontleft angle: ", state[1].angle.getDegrees());
-    SmartDashboard.putNumber("frontleft encoder: ", frontleft.getNEOEncoder());
-    SmartDashboard.putNumber("frontleft wrapoffset: ", frontleft.wrapoffset);
+    SmartDashboard.putNumber("frontleft encoder: ", -frontleft.getDriveEncoder());
+    SmartDashboard.putNumber("frontleft current", frontleft.drive.getOutputCurrent());
 
     SmartDashboard.putNumber("backright speed: ", state[2].speedMetersPerSecond);
     SmartDashboard.putNumber("backright angle: ", state[2].angle.getDegrees());
-    SmartDashboard.putNumber("backright encoder: ", backright.getNEOEncoder());
-    SmartDashboard.putNumber("backright wrapoffset: ", backright.wrapoffset);
+    SmartDashboard.putNumber("backright encoder: ", backright.getDriveEncoder());
+    SmartDashboard.putNumber("backright current", backright.drive.getOutputCurrent());
 
     SmartDashboard.putNumber("backleft speed: ", state[3].speedMetersPerSecond);
     SmartDashboard.putNumber("backleft angle: ", state[3].angle.getDegrees());
-    SmartDashboard.putNumber("backleft encoder: ", backleft.getNEOEncoder());
-    SmartDashboard.putNumber("backleft wrapoffset: ", backleft.wrapoffset);
+    SmartDashboard.putNumber("backleft encoder: ", backleft.getDriveEncoder());
+    SmartDashboard.putNumber("backleft current", backleft.drive.getOutputCurrent());
+
+    SmartDashboard.putNumber("ACCELEROMETER X", accelerometer.getX());
+    SmartDashboard.putNumber("ACCELEROMETER Y", accelerometer.getY());
+    SmartDashboard.putNumber("ACCELEROMETER Z", accelerometer.getZ());
 
     SmartDashboard.putNumber("NAVX Angle", NAVX.getAngle());
-
-
-    frontright.set(-state[0].speedMetersPerSecond, state[0].angle.getDegrees(), true);
-    frontleft.set(-state[1].speedMetersPerSecond, state[1].angle.getDegrees(), false);
-    backright.set(state[2].speedMetersPerSecond, state[2].angle.getDegrees(), false);
-    backleft.set(state[3].speedMetersPerSecond, state[3].angle.getDegrees(), true);
+    if (autoMode) {
+      return;
+    }
+    if (hatValue != -1) {
+      frontright.set(-Constants.DriveConstants.CREEP_SPEED, hatValue, true);
+      frontleft.set(Constants.DriveConstants.CREEP_SPEED, hatValue, false);
+      backright.set(-Constants.DriveConstants.CREEP_SPEED, hatValue, false);
+      backleft.set(-Constants.DriveConstants.CREEP_SPEED, hatValue, true);
+  
+    }else {
+      frontright.set(state[0].speedMetersPerSecond * Constants.DriveConstants.MAX_SPEED, state[0].angle.getDegrees(), true);
+      frontleft.set(-state[1].speedMetersPerSecond * Constants.DriveConstants.MAX_SPEED, state[1].angle.getDegrees(), false);
+      backright.set(state[2].speedMetersPerSecond * Constants.DriveConstants.MAX_SPEED, state[2].angle.getDegrees(), false);
+      backleft.set(state[3].speedMetersPerSecond * Constants.DriveConstants.MAX_SPEED, state[3].angle.getDegrees(), true);
+  
+    }
     
     Pose2d pose = m_odometry.update(new Rotation2d(), 
     new SwerveModulePosition[] {
@@ -181,9 +214,10 @@ public class DriveTrain extends SubsystemBase {
       new SwerveModulePosition(backleft.getDriveEncoder()*0.1156, new Rotation2d(backleft.getEncoder() * (3.14/180.0)))
     }
     );
-
+    SmartDashboard.putNumber("HAT VALUE", hatValue);
     SmartDashboard.putNumber("odometry x", pose.getX());
     SmartDashboard.putNumber("odometry y", pose.getY());
+    
     //t.set(0.5);
   }
 

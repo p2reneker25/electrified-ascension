@@ -12,7 +12,7 @@ public class ArmForward extends CommandBase {
     public void initialize(){}
 
     public void execute(){
-        armMotor.setExtendSpeed(0.3);
+        armMotor.setExtendSpeed(-0.5);
     }
     public void end(boolean interrupted){
         armMotor.setExtendSpeed(0);

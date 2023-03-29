@@ -12,15 +12,13 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class DriveCommand extends CommandBase {
+public class ForwardDrive extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveTrain drive;
-  private final Joystick joystick;
-  private final Joystick joystick2;
-  public DriveCommand(DriveTrain d, Joystick j, Joystick j2) {
+  private final double speed;
+  public ForwardDrive(DriveTrain d, double speed) {
     drive = d;
-    joystick = j;
-    joystick2 = j2;
+    this.speed = speed;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);
   }
@@ -32,16 +30,14 @@ public class DriveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (Constants.ButtonConstants.CONTROL_TWOJOYSTICKS == false) {
-      drive.drive(joystick.getX(), joystick.getY(), joystick.getZ(), joystick.getPOV());
-    }else {
-      drive.drive(joystick.getX(), joystick.getY(), joystick2.getX(), joystick.getPOV());
-    }
+    drive.drive(0, speed, 0, 0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    drive.drive(0, 0, 0, 0);
+  }
 
   // Returns true when the command should end.
   @Override

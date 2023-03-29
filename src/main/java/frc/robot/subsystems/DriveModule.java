@@ -14,8 +14,8 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants.DriveConstants;
 
 public class DriveModule {
-    private final CANSparkMax drive;
-    private final CANSparkMax steer;
+    public final CANSparkMax drive;
+    public final CANSparkMax steer;
     public final DutyCycleEncoder encoder;
     public final double offset;
     private double lastoffset;
@@ -26,6 +26,7 @@ public class DriveModule {
     public boolean flipBool = false;
     public double steerOffset = 0;
     public PIDController pid;
+    public double initDriveEncoder;
     public DriveModule(
         int DRIVE_CAN,
         int STEER_CAN,
@@ -33,6 +34,7 @@ public class DriveModule {
         double OFFSET
     ) {
         drive = new CANSparkMax(DRIVE_CAN, MotorType.kBrushless);
+        initDriveEncoder = drive.getEncoder().getPosition();
         steer = new CANSparkMax(STEER_CAN, MotorType.kBrushless);
         encoder = new DutyCycleEncoder(new DigitalInput(ENCODER_DIO));
         offset = OFFSET;
@@ -47,6 +49,7 @@ public class DriveModule {
         steer.set(0);
 
     }
+    
     public double getNEOEncoder() {
         // System.out.println(steer.getEncoder().getCountsPerRevolution());
         return (steer.getEncoder().getPosition() * 60.0) - steerOffset;
@@ -98,10 +101,10 @@ public class DriveModule {
         }
         
         
-        drive.set(drivespeed * 0.5);
+        drive.set(drivespeed);
     }
     public double getDriveEncoder() {
-        return drive.getEncoder().getPosition();
+        return drive.getEncoder().getVelocity();
     }
     public double getEncoder() {
         // if (firstwrap) {

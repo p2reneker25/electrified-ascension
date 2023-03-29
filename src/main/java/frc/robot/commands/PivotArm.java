@@ -1,4 +1,5 @@
 package frc.robot.commands;
+import frc.robot.Constants;
 import frc.robot.subsystems.*;
 
 
@@ -20,7 +21,24 @@ public class PivotArm extends CommandBase {
     }
     @Override
     public void execute(){
-        arm.setPivotSpeed(-speed);
+        
+        System.out.println("arm moving at speed:" + speed);
+        // if (arm.getLimit() == true) {
+        //     if (Constants.ArmConstants.LOW_GEAR) {
+        //         arm.setPivotSpeed(-speed);
+        //     }else {
+        //         arm.setPivotSpeed(-speed);
+        //     }
+            
+        // }else {
+        //     arm.setPivotSpeed(0);
+        //     arm.engageBrake(Value.kReverse);
+        // }
+        if (Constants.ArmConstants.LOW_GEAR) {
+            arm.setPivotSpeed(-speed);
+        }else {
+            arm.setPivotSpeed(-speed);
+        }
         
     }
     @Override
@@ -30,4 +48,5 @@ public class PivotArm extends CommandBase {
     }
     @Override
     public boolean isFinished(){return false;}
+// 
 }

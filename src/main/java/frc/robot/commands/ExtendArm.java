@@ -21,6 +21,7 @@ public class ExtendArm extends CommandBase{
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        
         arm.setExtendSpeed(speed);
         if (stop == false) {
             if (Math.abs(arm.getEncoder()-initialPos) > 5.0) {
@@ -38,6 +39,6 @@ public class ExtendArm extends CommandBase{
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-      return false;
+      return (arm.getEncoder() < -84);
     }
 }
