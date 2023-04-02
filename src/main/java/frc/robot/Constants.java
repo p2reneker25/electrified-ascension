@@ -35,12 +35,12 @@ public final class Constants {
         public static final double BACKLEFT_MODULE_OFFSET = 0.8; 
 
 
-        public static final double MAX_SPEED = 1.0;
+        public static final double MAX_SPEED = 0.5;
         public static final double CREEP_SPEED = 0.15;
         public static final double CHASSIS_WIDTH = 0.508;
         public static final double CHASSIS_LENGTH = 0.6223;
         
-        public static final double P = 0.012;
+        public static final double P = 0.01;
         public static final double I = 0.0;
         public static final double D = 0.0;
 

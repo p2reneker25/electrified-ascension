@@ -126,7 +126,7 @@ public class RobotContainer {
     arm_backwards.whileTrue(new ArmBackward(arm));
     arm_forwards.whileTrue(new ArmForward(arm));
     hand_grab.whileTrue(new HandGrab(hand,1));
-    hand_release.whileTrue(new HandGrab(hand,-0.75));
+    hand_release.whileTrue(new HandGrab(hand,-1.0));
     // hand_close.onTrue(new HandCylinder(hand));
     hand_open.onTrue(new HandCylinder(hand));
     arm_up.whileTrue(new PivotArm(arm, Constants.ArmConstants.ARM_SPEED));

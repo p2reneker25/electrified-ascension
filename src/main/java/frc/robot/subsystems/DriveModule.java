@@ -104,7 +104,10 @@ public class DriveModule {
         drive.set(drivespeed);
     }
     public double getDriveEncoder() {
-        return drive.getEncoder().getVelocity();
+        return drive.getEncoder().getPosition()-initDriveEncoder;
+    }
+    public double getEncoderDeviation(double avg) {
+        return Math.abs(avg-getDriveEncoder());
     }
     public double getEncoder() {
         // if (firstwrap) {
