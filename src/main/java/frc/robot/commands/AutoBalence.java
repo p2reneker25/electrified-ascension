@@ -13,34 +13,30 @@ public class AutoBalence extends CommandBase {
     double lastSpeed = 0;
     public AutoBalence(DriveTrain d){
         drive = d;
-        pid = new PIDController(0.5, 0, 0);
+        pid = new PIDController(0.02, 0, 0);
     }
     public void initialize(){
         alternate_count = 0;
     }
 
     public void execute(){
-
-        double accelerometer = drive.getAccelerometer().getX();
-        accelerometer += lastSensor;
-        accelerometer /= 2;
-        double pidValue = pid.calculate(accelerometer, 0);
+        drive.autoMode = true;
+        double gyro = drive.NAVX.getPitch() + 8.71;
+        gyro += lastSensor;
+        gyro /= 2;
+        double pidValue = pid.calculate(gyro, 0);
         if (pidValue > 0.5) {pidValue = 0.5;}
         if (pidValue < -0.5) {pidValue = -0.5;}
         // drive.driveAuto(0, pidValue, 0);
-        pidValue = -pidValue;
-        if ((lastSpeed > 0 && pidValue < 0) || (lastSpeed < 0 && pidValue > 0)) {
-            alternate_count++;
-        }
+        
         drive.frontright.set(-pidValue, 0, true);
         drive.frontleft.set(pidValue, 0, false);
         drive.backright.set(-pidValue, 0, false);
         drive.backleft.set(-pidValue, 0, true);
-        lastSensor = drive.getAccelerometer().getX();
-        drive.autoMode = true;
+        
     }
     public void end(boolean interrupted){
         drive.autoMode = false;
     }
-    public boolean isFinished(){return alternate_count > 5;}
+    public boolean isFinished(){return false;}
 }

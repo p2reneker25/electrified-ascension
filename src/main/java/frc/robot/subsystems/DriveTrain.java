@@ -5,8 +5,6 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
-import com.swervedrivespecialties.swervelib.SwerveModule;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -30,7 +28,6 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 public class DriveTrain extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   public final DriveModule frontright;
@@ -46,6 +43,10 @@ public class DriveTrain extends SubsystemBase {
   private double navxoffset = 0;
   public PIDController navxpid;
   public Accelerometer accelerometer = new BuiltInAccelerometer();
+  double drive_magnitude = 0;
+  double navx_tilt = 0;
+
+
   private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
       new Translation2d(-DriveConstants.CHASSIS_WIDTH / 2,DriveConstants.CHASSIS_LENGTH / 2), 
       new Translation2d(-DriveConstants.CHASSIS_WIDTH/2,-DriveConstants.CHASSIS_LENGTH/2),
@@ -88,7 +89,7 @@ public class DriveTrain extends SubsystemBase {
     }, new Pose2d(0,0, new Rotation2d())
   );
       chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
-
+      
       NAVX.reset();
       navxpid = new PIDController(0.025, 0, 0);
 
@@ -109,6 +110,7 @@ public class DriveTrain extends SubsystemBase {
     }else {
       navxoffset = NAVX.getAngle();
     }
+    drive_magnitude = Math.sqrt(x*x+y*y+z*z);
     chassisSpeeds.vxMetersPerSecond = y;
     chassisSpeeds.vyMetersPerSecond = x;
     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(y, x, z, NAVX.getRotation2d());
@@ -164,9 +166,9 @@ public class DriveTrain extends SubsystemBase {
   public Translation3d getAccelerometer() {
     return new Translation3d(accelerometer.getX(), accelerometer.getY(), accelerometer.getZ());
   }
-  public double encoderToOptimize(double encval) {
+  public double encoderToOptimize(double encval, float offset) {
     // encval = encval % 360;
-    encval -= 97;
+    encval -= offset;
     if (encval > 360) {encval-=360;}
     if (encval < 0) {encval+=360;}
     // encval -= 270;
@@ -187,16 +189,31 @@ public class DriveTrain extends SubsystemBase {
     return ((frontright.getDriveEncoder() + frontleft.getDriveEncoder() +
             backright.getDriveEncoder() + backleft.getDriveEncoder()/4.0))*0.1156;
   }
+  public double toMagnitude(double x) {
+    if (x < 0) {
+      x = -drive_magnitude;
+    }else {
+      x = drive_magnitude;
+    }
+    return x;
+  }
   @Override
   public void periodic() {
     
     SwerveModuleState[] state = kinematics.toSwerveModuleStates(chassisSpeeds);
-    SmartDashboard.putNumber("Optimize Encoder", encoderToOptimize(frontright.getEncoder()));
-    SmartDashboard.putNumber("Optimize State", stateToOptimize(state[2].angle.getDegrees()));
-    System.out.println("shouldSwap: " + shouldSwap(encoderToOptimize(frontright.getEncoder()), stateToOptimize(state[2].angle.getDegrees())));
+  
+    // SmartDashboard.putNumber("Optimize Encoder", encoderToOptimize(frontleft.getEncoder(), 64));
+    // SmartDashboard.putNumber("Optimize State", stateToOptimize(state[3].angle.getDegrees()));
+    // SmartDashboard.putNumber("NAVX PITCH", NAVX.getPitch());
+    
+    // System.out.println("shouldSwap: " + shouldSwap(encoderToOptimize(frontleft.getEncoder(), 64), stateToOptimize(state[3].angle.getDegrees())));
     // state[0] = SwerveModuleState.optimize(state[0], new Rotation2d(backright.getNEOEncoder() * (3.14/180.0)));
     // // state[1] = SwerveModuleState.optimize(state[1], new Rotation2d(backleft.getNEOEncoder() * (3.14/180.0)));
-    state[2] = optimize(state[2], encoderToOptimize(frontright.getEncoder()));    
+    state[0] = optimize(state[0], encoderToOptimize(backright.getEncoder(), 248));    
+    state[1] = optimize(state[1], encoderToOptimize(backleft.getEncoder(), 108));    
+
+    state[2] = optimize(state[2], encoderToOptimize(frontright.getEncoder(), 97));    
+    state[3] = optimize(state[3], encoderToOptimize(frontleft.getEncoder(), 64));    
     // System.out.println("encoder: " + encoderToOptimize(encval) + " state angle: " + stateToOptimize(stateval));
     // state[3] = SwerveModuleState.optimize(state[3], new Rotation2d(-frontleft.getNEOEncoder() * (3.14/180.0)));
     // if (Math.abs(chassisSpeeds.vxMetersPerSecond) < 0.01 &&
@@ -210,34 +227,34 @@ public class DriveTrain extends SubsystemBase {
           
     //     }
     double avg = (frontright.getDriveEncoder()+frontleft.getDriveEncoder()+backright.getDriveEncoder()+backleft.getDriveEncoder())/4.0;
-    // SmartDashboard.putNumber("frontright speed: ", state[0].speedMetersPerSecond);
-    // SmartDashboard.putNumber("frontright angle: ", state[0].angle.getDegrees());
-    SmartDashboard.putNumber("frontright encoder: ", frontright.getDriveEncoder());
-    SmartDashboard.putNumber("frontright deviation: ", frontright.getEncoderDeviation(avg));
-    // SmartDashboard.putNumber("frontright current", frontright.drive.getOutputCurrent());
+    // SmartDashboard.putNumber("frontright speed: ", Math.abs(state[0].speedMetersPerSecond));
+    // // SmartDashboard.putNumber("frontright angle: ", state[0].angle.getDegrees());
+    // SmartDashboard.putNumber("frontright encoder: ", frontright.getDriveEncoder());
+    // SmartDashboard.putNumber("frontright deviation: ", Math.abs(frontright.drive.getEncoder().getVelocity()));
+    // // SmartDashboard.putNumber("frontright current", frontright.drive.getOutputCurrent());
 
-    // SmartDashboard.putNumber("frontleft speed: ", state[1].speedMetersPerSecond);
-    // SmartDashboard.putNumber("frontleft angle: ", state[1].angle.getDegrees());
-    SmartDashboard.putNumber("frontleft encoder: ", frontleft.getDriveEncoder());
-    SmartDashboard.putNumber("frontleft deviation: ", frontleft.getEncoderDeviation(avg));
-    // SmartDashboard.putNumber("frontleft current", frontleft.drive.getOutputCurrent());
+    // SmartDashboard.putNumber("frontleft speed: ", Math.abs(state[1].speedMetersPerSecond));
+    // // SmartDashboard.putNumber("frontleft angle: ", state[1].angle.getDegrees());
+    // SmartDashboard.putNumber("frontleft encoder: ", frontleft.getDriveEncoder());
+    // SmartDashboard.putNumber("frontleft deviation: ", Math.abs(frontleft.drive.getEncoder().getVelocity()));
+    // // SmartDashboard.putNumber("frontleft current", frontleft.drive.getOutputCurrent());
 
-    // SmartDashboard.putNumber("backright speed: ", state[2].speedMetersPerSecond);
-    // SmartDashboard.putNumber("backright angle: ", state[2].angle.getDegrees());
-    SmartDashboard.putNumber("backright encoder: ", backright.getDriveEncoder());
-    SmartDashboard.putNumber("backright deviation: ", backright.getEncoderDeviation(avg));
-    // SmartDashboard.putNumber("backright current", backright.drive.getOutputCurrent());
+    // SmartDashboard.putNumber("backright speed: ", Math.abs(state[2].speedMetersPerSecond));
+    // // SmartDashboard.putNumber("backright angle: ", state[2].angle.getDegrees());
+    // SmartDashboard.putNumber("backright encoder: ", backright.getDriveEncoder());
+    // SmartDashboard.putNumber("backright deviation: ", Math.abs(backright.drive.getEncoder().getVelocity()));
+    // // SmartDashboard.putNumber("backright current", backright.drive.getOutputCurrent());
 
-    // SmartDashboard.putNumber("backleft speed: ", state[3].speedMetersPerSecond);
-    // SmartDashboard.putNumber("backleft angle: ", state[3].angle.getDegrees());
-    SmartDashboard.putNumber("backleft encoder: ", backleft.getDriveEncoder());
-    SmartDashboard.putNumber("backleft deviation: ", backleft.getEncoderDeviation(avg));
-    // SmartDashboard.putNumber("backleft current", backleft.drive.getOutputCurrent());
+    // SmartDashboard.putNumber("backleft speed: ", Math.abs(state[3].speedMetersPerSecond));
+    // // SmartDashboard.putNumber("backleft angle: ", state[3].angle.getDegrees());
+    // SmartDashboard.putNumber("backleft encoder: ", backleft.getDriveEncoder());
+    // SmartDashboard.putNumber("backleft deviation: ", Math.abs(backleft.drive.getEncoder().getVelocity()));
+    // // SmartDashboard.putNumber("backleft current", backleft.drive.getOutputCurrent());
 
-    SmartDashboard.putNumber("ACCELEROMETER X", accelerometer.getX());
-    // SmartDashboard.putNumber("ACCELEROMETER Y", accelerometer.getY());
-    // SmartDashboard.putNumber("ACCELEROMETER Z", accelerometer.getZ());
-    SmartDashboard.putNumber("NAVX Angle", NAVX.getAngle());
+    // SmartDashboard.putNumber("ACCELEROMETER X", accelerometer.getX());
+    // // SmartDashboard.putNumber("ACCELEROMETER Y", accelerometer.getY());
+    // // SmartDashboard.putNumber("ACCELEROMETER Z", accelerometer.getZ());
+    // SmartDashboard.putNumber("NAVX Angle", NAVX.getAngle());
     if (autoMode) {
       return;
     }
@@ -247,10 +264,10 @@ public class DriveTrain extends SubsystemBase {
       backright.set(-Constants.DriveConstants.CREEP_SPEED, hatValue, false);
       backleft.set(-Constants.DriveConstants.CREEP_SPEED, hatValue, true);
     }else {
-      frontright.set(state[2].speedMetersPerSecond * Constants.DriveConstants.MAX_SPEED, state[2].angle.getDegrees(), true);
-      frontleft.set(state[3].speedMetersPerSecond * Constants.DriveConstants.MAX_SPEED, state[1].angle.getDegrees()+180, false);
-      backright.set(state[0].speedMetersPerSecond * Constants.DriveConstants.MAX_SPEED, state[2].angle.getDegrees()+180, false);
-      backleft.set(state[1].speedMetersPerSecond * Constants.DriveConstants.MAX_SPEED, state[3].angle.getDegrees(), true);
+      frontright.set(state[0].speedMetersPerSecond * Constants.DriveConstants.MAX_SPEED, state[0].angle.getDegrees(), true);
+      frontleft.set(state[1].speedMetersPerSecond * Constants.DriveConstants.MAX_SPEED, state[1].angle.getDegrees()+180, false);
+      backright.set(state[2].speedMetersPerSecond * Constants.DriveConstants.MAX_SPEED, state[2].angle.getDegrees()+180, false);
+      backleft.set(state[3].speedMetersPerSecond * Constants.DriveConstants.MAX_SPEED, state[3].angle.getDegrees(), true);
       // frontleft.set(state[3].speedMetersPerSecond * Constants.DriveConstants.MAX_SPEED, 0, false);
       // backright.set(state[0].speedMetersPerSecond * Constants.DriveConstants.MAX_SPEED, 0, false);
       // backleft.set(state[1].speedMetersPerSecond * Constants.DriveConstants.MAX_SPEED, 0, true);
