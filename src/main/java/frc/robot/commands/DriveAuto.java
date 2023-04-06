@@ -25,13 +25,13 @@ public class DriveAuto extends CommandBase {
     @Override
     public void execute() {
         drive.autoMode = true;
-        currentdist = drive.getDriveEncoderAvg()-initValue;
-        drive.driveInDirection(-speed, angle);
+        currentdist = Math.abs(drive.getDriveEncoderAvg()-initValue);
+        drive.driveInDirection(speed, angle);
     }
     @Override
     public void end(boolean interrupted) {
         drive.autoMode = false;
     }
     @Override
-    public boolean isFinished() {return (currentdist < -distance);}
+    public boolean isFinished() {return (currentdist > distance);}
 }

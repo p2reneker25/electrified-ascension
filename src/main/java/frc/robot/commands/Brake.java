@@ -18,9 +18,9 @@ public class Brake extends CommandBase{
         brakeEngaged = !brakeEngaged;
         if (brakeEngaged) {
             arm.setBrake(Value.kForward);
-            System.out.println("brake open");
+            // System.out.println("brake open");
         }else {
-            System.out.println("brake close");
+            // System.out.println("brake close");
             arm.setBrake(Value.kReverse);
         }
         t.reset();

@@ -8,10 +8,14 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.AutoBalence;
+import frc.robot.commands.AutoSequence;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.HandGrab;
+import frc.robot.commands.Intake;
+import frc.robot.commands.ResetFOD;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Hand;
+import frc.robot.subsystems.Jackson9001;
 import frc.robot.subsystems.Vision;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -30,25 +34,16 @@ public class RobotContainer {
   private final Vision vision = new Vision();
   // private final Arm arm = new Arm();
   private final Hand hand = new Hand();
+  private final Jackson9001 roller = new Jackson9001();
   private final Joystick joystick;
   private final Joystick joystick2;
   private final Joystick guitar;
-  // private final JoystickButton b_armExtend;
-  // private final JoystickButton b_armRetract;
-
-  // private final JoystickButton b_positionrobot;
-  //  private final JoystickButton b_break;
-  //private final JoystickButton b_turnWrist;
-  // private final JoystickButton arm_backwards;
-  // private final JoystickButton arm_up;
-  // private final JoystickButton arm_down;
-  // private final JoystickButton arm_forwards;
   private final JoystickButton hand_grab;
   private final JoystickButton hand_release;
-  // private final JoystickButton hand_close;
-  // private final JoystickButton hand_open;
-
+  private final JoystickButton roller_intake;
+  private final JoystickButton roller_outtake;
   private final JoystickButton drive_forward;
+  private final JoystickButton drive_resetfod;
 
 
   // private final JoystickButton arm_setGround;
@@ -66,6 +61,9 @@ public class RobotContainer {
     //b_turnWrist = new JoystickButton(joystick, Constants.ButtonConstants.BUTTON_WRIST);
     hand_grab = new JoystickButton(guitar, ButtonConstants.BUTTON_HAND_HOLD_GUITAR);
     hand_release = new JoystickButton(guitar, ButtonConstants.BUTTON_HAND_LETGO_GUITAR);
+    roller_intake = new JoystickButton(guitar, ButtonConstants.BUTTON_INTAKE_GUITAR);
+    roller_outtake = new JoystickButton(guitar, ButtonConstants.BUTTON_OUTTAKE_GUITAR);
+    drive_resetfod = new JoystickButton(joystick, ButtonConstants.BUTTON_RESETFOD);
     // hand_close = new JoystickButton(guitar,ButtonConstants.BUTTON_HAND_OPEN_GUITAR);
     // hand_open = new JoystickButton(guitar, ButtonConstants.BUTTON_HAND_OPEN_GUITAR);
     // arm_backwards = new JoystickButton(guitar, Constants.ButtonConstants.BUTTON_ARM_RETRACT_GUITAR);
@@ -89,14 +87,17 @@ public class RobotContainer {
     //b_turnWrist.onTrue(new TurnWrist(wrist));
     // arm_backwards.whileTrue(new ArmBackward(arm));
     // arm_forwards.whileTrue(new ArmForward(arm));
-    hand_grab.whileTrue(new HandGrab(hand,1));
-    hand_release.whileTrue(new HandGrab(hand,-1.0));
+    hand_grab.whileTrue(new HandGrab(hand,-0.5));
+    hand_release.whileTrue(new HandGrab(hand,1.0));
+    roller_intake.whileTrue(new Intake(roller,0.25));
+    roller_outtake.whileTrue(new Intake(roller, -0.25));
     // hand_close.onTrue(new HandCylinder(hand));
     // hand_open.onTrue(new HandCylinder(hand));
     // arm_up.whileTrue(new PivotArm(arm, Constants.ArmConstants.ARM_SPEED));
     // arm_down.whileTrue(new PivotArm(arm,-Constants.ArmConstants.ARM_SPEED * 0.5));
     drivetrain.setDefaultCommand(new DriveCommand(drivetrain, joystick, joystick2));
     drive_forward.whileTrue(new AutoBalence(drivetrain));
+    drive_resetfod.onTrue(new ResetFOD(drivetrain));
     // b_positionrobot.whileTrue(new PositionRobot(drivetrain, vision));
     // b_break.whileTrue(new Brake(arm));
     // arm_setGround.whileTrue(new ArmSetGround(arm));
@@ -122,6 +123,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
+    return new AutoSequence(drivetrain, hand);
   }
 }

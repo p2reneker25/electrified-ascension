@@ -22,18 +22,7 @@ public class PivotArm extends CommandBase {
     @Override
     public void execute(){
         
-        System.out.println("arm moving at speed:" + speed);
-        // if (arm.getLimit() == true) {
-        //     if (Constants.ArmConstants.LOW_GEAR) {
-        //         arm.setPivotSpeed(-speed);
-        //     }else {
-        //         arm.setPivotSpeed(-speed);
-        //     }
-            
-        // }else {
-        //     arm.setPivotSpeed(0);
-        //     arm.engageBrake(Value.kReverse);
-        // }
+        // System.out.println("arm moving at speed:" + speed);
         if (Constants.ArmConstants.LOW_GEAR) {
             arm.setPivotSpeed(-speed);
         }else {
@@ -48,5 +37,4 @@ public class PivotArm extends CommandBase {
     }
     @Override
     public boolean isFinished(){return false;}
-// 
 }

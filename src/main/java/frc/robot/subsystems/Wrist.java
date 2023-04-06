@@ -28,7 +28,7 @@ public class Wrist extends SubsystemBase {
                 speedcontroller.set(0.02);
             }else {
                 speedcontroller.set(-0.02);
-            }
+            } 
         }else {
             speedcontroller.set(0);
         }

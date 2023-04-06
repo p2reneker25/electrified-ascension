@@ -40,7 +40,7 @@ public final class Constants {
         public static final double CHASSIS_WIDTH = 0.508;
         public static final double CHASSIS_LENGTH = 0.6223;
         
-        public static final double P = 0.012;
+        public static final double P = 0.008;
         public static final double I = 0.0;
         public static final double D = 0.0;
 
@@ -68,11 +68,14 @@ public final class Constants {
 
         public static final int BUTTON_ARMUP_GUITAR = 9;
         public static final int BUTTON_ARMDOWN_GUITAR = 8;
+        public static final int BUTTON_INTAKE_GUITAR = 9; 
+        public static final int BUTTON_OUTTAKE_GUITAR = 8;
         public static final int BUTTON_ARM_EXTEND_GUITAR = 1;
         public static final int BUTTON_ARM_RETRACT_GUITAR = 2;
         public static final int BUTTON_HAND_HOLD_GUITAR = 3;
         public static final int BUTTON_HAND_LETGO_GUITAR = 4;
         public static final int BUTTON_HAND_OPEN_GUITAR = 5;
+        public static final int BUTTON_RESETFOD = 11;
         
 
 
@@ -96,9 +99,12 @@ public final class Constants {
     }
     public final class HandConstants {
         public static final int HAND_MOTOR_PWM = 0;
-
+        
         public static final int HAND_CYLINDER_UP = 1;
         public static final int HAND_CYLINDER_DOWN = 2;
+    }
+    public final class RollerConstants {
+        public static final int ROLLER_MOTOR_CAN = 12;
     }
     
 

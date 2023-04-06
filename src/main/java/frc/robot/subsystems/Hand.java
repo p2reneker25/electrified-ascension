@@ -17,13 +17,14 @@ import frc.robot.Constants;
 public class Hand {
    private MotorController handMotor; 
 
-   private DoubleSolenoid handSolonoid;
+//    private DoubleSolenoid handSolonoid;
    
     public Hand(){
+        
         handMotor = new VictorSP(Constants.HandConstants.HAND_MOTOR_PWM);
-        handSolonoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,
-         Constants.HandConstants.HAND_CYLINDER_UP,
-          Constants.HandConstants.HAND_CYLINDER_DOWN);
+        // handSolonoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,
+        //  Constants.HandConstants.HAND_CYLINDER_UP,
+        //   Constants.HandConstants.HAND_CYLINDER_DOWN);
 
     }
     public void setHandSpeed(double speed){
@@ -31,9 +32,9 @@ public class Hand {
     }
 
     public void setHandCylinder(Value v){
-        handSolonoid.set(v);
+        // handSolonoid.set(v);
         
-        System.out.println("cylinder moved");
+        // System.out.println("cylinder moved");
     }
 
 

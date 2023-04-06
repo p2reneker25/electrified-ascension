@@ -23,9 +23,9 @@ public class HandCylinder extends CommandBase {
         pos = !pos;
         if (pos) {
             hand.setHandCylinder(Value.kReverse);
-            System.out.println("claw open");
+            // System.out.println("claw open");
         }else {
-            System.out.println("claw close");
+            // System.out.println("claw close");
             hand.setHandCylinder(Value.kForward);
         }
         timer.reset();
