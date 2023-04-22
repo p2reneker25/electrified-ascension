@@ -35,7 +35,7 @@ public class DriveTrain extends SubsystemBase {
   public final DriveModule backright;
   public final DriveModule backleft;
   DoubleLogEntry encoderLog;
-  private ChassisSpeeds chassisSpeeds;
+  public ChassisSpeeds chassisSpeeds;
 
   public boolean autoMode = false;
   public int hatValue = 0;
@@ -46,7 +46,7 @@ public class DriveTrain extends SubsystemBase {
   double drive_magnitude = 0;
   double navx_tilt = 0;
   double fodoffset = 0;
-
+  public double pitchoffset = 0;
 
   private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
       new Translation2d(-DriveConstants.CHASSIS_WIDTH / 2,DriveConstants.CHASSIS_LENGTH / 2), 
@@ -90,9 +90,11 @@ public class DriveTrain extends SubsystemBase {
     }, new Pose2d(0,0, new Rotation2d())
   );
       chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
-      
+      SmartDashboard.putNumber("P", 0.008);
+      SmartDashboard.putNumber("D", 0.0);
       NAVX.reset();
-      navxpid = new PIDController(0.025, 0, 0);
+      // navxpid = new PIDController(0.025, 0, 0);
+      navxpid = new PIDController(0.005, 0, 0);
 
       DataLogManager.start();
       DriverStation.startDataLog(DataLogManager.getLog());
@@ -118,21 +120,26 @@ public class DriveTrain extends SubsystemBase {
       navxoffset = NAVX.getAngle();
     }
     drive_magnitude = Math.sqrt(x*x+y*y+z*z);
-    chassisSpeeds.vxMetersPerSecond = y;
-    chassisSpeeds.vyMetersPerSecond = x;
+    // chassisSpeeds.vxMetersPerSecond = y;
+    // chassisSpeeds.vyMetersPerSecond = x;
     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-y, -x, z, NAVX.getRotation2d());
     // chassisSpeeds = new ChassisSpeeds(y, x, z);
     hatValue = hat;
+    
     // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, NAVX.getRotation2d());
   }
   public void driveAuto(double x, double y, double z) {
     chassisSpeeds = new ChassisSpeeds(y, x, z);
   }
   public void driveInDirection(double speed, double angle) {
-    frontright.set(speed, angle, true);
-    frontleft.set(speed, angle+180, false);
-    backright.set(speed, angle+180, false);
-    backleft.set(speed, angle, false);
+    frontright.set(speed, 0, true);
+    frontleft.set(speed, 180, false);
+    backright.set(speed, 180, false);
+    backleft.set(speed, 0, true);
+
+  }
+  public void setPitchOffset(double p) {
+    pitchoffset = p;
   }
   public double clampToAngle(double i) {
     if (i > 360.0) {
@@ -193,7 +200,7 @@ public class DriveTrain extends SubsystemBase {
   }
   public double getDriveEncoderAvg() {
     return ((frontright.getDriveEncoder() + frontleft.getDriveEncoder() +
-            backright.getDriveEncoder() + backleft.getDriveEncoder()/4.0))*0.1156;
+            backright.getDriveEncoder() + backleft.getDriveEncoder()/4.0));
   }
   public double toMagnitude(double x) {
     if (x < 0) {
@@ -203,11 +210,14 @@ public class DriveTrain extends SubsystemBase {
     }
     return x;
   }
+  public double getPitch() {
+    return NAVX.getPitch()+pitchoffset+10;
+  }
   @Override
   public void periodic() {
     
     SwerveModuleState[] state = kinematics.toSwerveModuleStates(chassisSpeeds);
-  
+    SmartDashboard.putNumber("Average Encoder", frontright.getDriveEncoder()/Constants.DriveConstants.ENCODER_PER_INCH);
     // SmartDashboard.putNumber("Optimize Encoder", encoderToOptimize(frontleft.getEncoder(), 64));
     // SmartDashboard.putNumber("Optimize State", stateToOptimize(state[3].angle.getDegrees()));
     // SmartDashboard.putNumber("NAVX PITCH", NAVX.getPitch());
@@ -232,28 +242,36 @@ public class DriveTrain extends SubsystemBase {
     //       return;
           
     //     }
+    SmartDashboard.putNumber("PITCH", getPitch());
+    if (autoMode == true) {
+      return;
+    }
     double avg = (frontright.getDriveEncoder()+frontleft.getDriveEncoder()+backright.getDriveEncoder()+backleft.getDriveEncoder())/4.0;
-    // SmartDashboard.putNumber("frontright speed: ", Math.abs(state[0].speedMetersPerSecond));
+    SmartDashboard.putNumber("frontright speed: ", Math.abs(state[0].speedMetersPerSecond));
     // // SmartDashboard.putNumber("frontright angle: ", state[0].angle.getDegrees());
-    // SmartDashboard.putNumber("frontright encoder: ", frontright.getDriveEncoder());
+    SmartDashboard.putNumber("frontright encoder: ", frontright.getEncoder());
+    SmartDashboard.putNumber("frontright offset: ", Constants.DriveConstants.FRONTRIGHT_MODULE_OFFSET*360.0);
     // SmartDashboard.putNumber("frontright deviation: ", Math.abs(frontright.drive.getEncoder().getVelocity()));
     // // SmartDashboard.putNumber("frontright current", frontright.drive.getOutputCurrent());
 
     // SmartDashboard.putNumber("frontleft speed: ", Math.abs(state[1].speedMetersPerSecond));
     // // SmartDashboard.putNumber("frontleft angle: ", state[1].angle.getDegrees());
-    // SmartDashboard.putNumber("frontleft encoder: ", frontleft.getDriveEncoder());
+    SmartDashboard.putNumber("frontleft encoder: ", frontleft.getEncoder());
+    SmartDashboard.putNumber("frontleft offset: ", Constants.DriveConstants.FRONTLEFT_MODULE_OFFSET*360.0);
     // SmartDashboard.putNumber("frontleft deviation: ", Math.abs(frontleft.drive.getEncoder().getVelocity()));
     // // SmartDashboard.putNumber("frontleft current", frontleft.drive.getOutputCurrent());
 
     // SmartDashboard.putNumber("backright speed: ", Math.abs(state[2].speedMetersPerSecond));
     // // SmartDashboard.putNumber("backright angle: ", state[2].angle.getDegrees());
-    // SmartDashboard.putNumber("backright encoder: ", backright.getDriveEncoder());
+    SmartDashboard.putNumber("backright encoder: ", backright.getEncoder());
+    SmartDashboard.putNumber("backright offset: ", Constants.DriveConstants.BACKRIGHT_MODULE_OFFSET*360.0);
     // SmartDashboard.putNumber("backright deviation: ", Math.abs(backright.drive.getEncoder().getVelocity()));
     // // SmartDashboard.putNumber("backright current", backright.drive.getOutputCurrent());
 
     // SmartDashboard.putNumber("backleft speed: ", Math.abs(state[3].speedMetersPerSecond));
     // // SmartDashboard.putNumber("backleft angle: ", state[3].angle.getDegrees());
-    // SmartDashboard.putNumber("backleft encoder: ", backleft.getDriveEncoder());
+    SmartDashboard.putNumber("backleft encoder: ", backleft.getEncoder());
+    SmartDashboard.putNumber("backleft offset: ", Constants.DriveConstants.BACKLEFT_MODULE_OFFSET*360.0);
     // SmartDashboard.putNumber("backleft deviation: ", Math.abs(backleft.drive.getEncoder().getVelocity()));
     // // SmartDashboard.putNumber("backleft current", backleft.drive.getOutputCurrent());
 
@@ -261,9 +279,10 @@ public class DriveTrain extends SubsystemBase {
     // // SmartDashboard.putNumber("ACCELEROMETER Y", accelerometer.getY());
     // // SmartDashboard.putNumber("ACCELEROMETER Z", accelerometer.getZ());
     SmartDashboard.putNumber("NAVX Angle", NAVX.getAngle());
-    if (autoMode) {
-      return;
-    }
+    SmartDashboard.putNumber("Drive Encoder Avg", getDriveEncoderAvg());
+    // if (autoMode) {
+    //   return;
+    // }
     if (hatValue != -1) {
       frontright.set(-Constants.DriveConstants.CREEP_SPEED, hatValue, true);
       frontleft.set(Constants.DriveConstants.CREEP_SPEED, hatValue, false);
@@ -287,7 +306,18 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("HAT VALUE", hatValue);
     SmartDashboard.putNumber("odometry x", pose.getX());
     SmartDashboard.putNumber("odometry y", pose.getY());
-    
+    // double p = SmartDashboard.getNumber("P", 0.008);
+    // frontright.pid.setP(p);
+    // frontleft.pid.setP(p);
+    // backright.pid.setP(p);
+    // backleft.pid.setP(p);
+
+    // double d = SmartDashboard.getNumber("D", 0.00);
+    // frontright.pid.setD(d);
+    // frontleft.pid.setD(d);
+    // backright.pid.setD(d);
+    // backleft.pid.setD(d);
+    System.out.println("RUNNING PERIODIC: " + autoMode);
   }
 
   @Override

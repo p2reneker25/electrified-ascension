@@ -30,10 +30,12 @@ public class DriveModule {
         drive = new CANSparkMax(DRIVE_CAN, MotorType.kBrushless);
         initDriveEncoder = drive.getEncoder().getPosition();
         steer = new CANSparkMax(STEER_CAN, MotorType.kBrushless);
+        drive.setSmartCurrentLimit(25);
         encoder = new DutyCycleEncoder(new DigitalInput(ENCODER_DIO));
         offset = OFFSET;
           pid = new PIDController(DriveConstants.P, DriveConstants.I, DriveConstants.D);
         steerOffset = getNEOEncoder();
+        // drive.getEncoder().setPositionConversionFactor(0.7091);
         pid.enableContinuousInput(0, 360);
     }
     public void stop() {
@@ -41,7 +43,10 @@ public class DriveModule {
         steer.set(0);
 
     }
-    
+    public void resetDriveEncoder() {
+        initDriveEncoder = drive.getEncoder().getPosition();
+
+    }
     public double getNEOEncoder() {
         return (steer.getEncoder().getPosition() * 60.0) - steerOffset;
     }
@@ -50,7 +55,7 @@ public class DriveModule {
         double flip = -1;
         if (flipPID == true) {flip = 1;}
         
-        double mspeed = MathUtil.clamp(pid.calculate(getEncoder(), angle) * flip, -0.2, 0.2);
+        double mspeed = MathUtil.clamp(pid.calculate(getEncoder(), angle) * flip, -1, 1);
         
         double dif = pid.getPositionError();
         

@@ -21,7 +21,7 @@ public class Hand {
    
     public Hand(){
         
-        handMotor = new VictorSP(Constants.HandConstants.HAND_MOTOR_PWM);
+        handMotor = new CANSparkMax(Constants.HandConstants.HAND_MOTOR_CAN, MotorType.kBrushless);
         // handSolonoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,
         //  Constants.HandConstants.HAND_CYLINDER_UP,
         //   Constants.HandConstants.HAND_CYLINDER_DOWN);

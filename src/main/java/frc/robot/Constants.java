@@ -17,12 +17,12 @@ public final class Constants {
         public static final int FRONTRIGHT_MODULE_DRIVE_CAN = 6;
         public static final int FRONTRIGHT_MODULE_STEER_CAN = 2; 
         public static final int FRONTRIGHT_MODULE_ENCODER = 2; 
-        public static final double FRONTRIGHT_MODULE_OFFSET = 0.77; 
+        public static final double FRONTRIGHT_MODULE_OFFSET = 0.77;
 
         public static final int FRONTLEFT_MODULE_DRIVE_CAN = 4;
         public static final int FRONTLEFT_MODULE_STEER_CAN = 9; 
         public static final int FRONTLEFT_MODULE_ENCODER = 0; 
-        public static final double FRONTLEFT_MODULE_OFFSET = 0.18; 
+        public static final double FRONTLEFT_MODULE_OFFSET = 0.18;
 
         public static final int BACKRIGHT_MODULE_DRIVE_CAN = 8;
         public static final int BACKRIGHT_MODULE_STEER_CAN = 5; 
@@ -40,9 +40,11 @@ public final class Constants {
         public static final double CHASSIS_WIDTH = 0.508;
         public static final double CHASSIS_LENGTH = 0.6223;
         
-        public static final double P = 0.008;
+        public static final double P = 0.007;
         public static final double I = 0.0;
-        public static final double D = 0.0;
+        public static final double D = 0.00005;
+
+        public static final double ENCODER_PER_INCH = 0.72;
 
         public static final double FORWARD_SPEED = 0.5;
     }
@@ -65,7 +67,10 @@ public final class Constants {
         public static final int BUTTON_SETGROUND = 11;
 
         public static final int BUTTON_DRIVE_FORWARD = 9;
-
+        public static final int BUTTON_INTAKE_UP = 5;
+        public static final int BUTTON_INTAKE_DOWN = 3;
+        public static final int BUTTON_INTAKE_IN = 6;
+        public static final int BUTTON_INTAKE_OUT = 4;
         public static final int BUTTON_ARMUP_GUITAR = 9;
         public static final int BUTTON_ARMDOWN_GUITAR = 8;
         public static final int BUTTON_INTAKE_GUITAR = 9; 
@@ -73,9 +78,9 @@ public final class Constants {
         public static final int BUTTON_ARM_EXTEND_GUITAR = 1;
         public static final int BUTTON_ARM_RETRACT_GUITAR = 2;
         public static final int BUTTON_HAND_HOLD_GUITAR = 3;
-        public static final int BUTTON_HAND_LETGO_GUITAR = 4;
-        public static final int BUTTON_HAND_OPEN_GUITAR = 5;
-        public static final int BUTTON_RESETFOD = 11;
+        public static final int BUTTON_HAND_LETGO_GUITAR = 5;
+        public static final int BUTTON_HAND_LETGO_HIGH_GUITAR = 4;
+        public static final int BUTTON_RESETFOD = 1;
         
 
 
@@ -98,7 +103,7 @@ public final class Constants {
 
     }
     public final class HandConstants {
-        public static final int HAND_MOTOR_PWM = 0;
+        public static final int HAND_MOTOR_CAN = 11;
         
         public static final int HAND_CYLINDER_UP = 1;
         public static final int HAND_CYLINDER_DOWN = 2;

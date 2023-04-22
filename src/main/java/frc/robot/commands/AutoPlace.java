@@ -29,5 +29,5 @@ public class AutoPlace extends CommandBase {
         t.stop();
     }
     @Override
-    public boolean isFinished(){return t.get() > 3;}
+    public boolean isFinished(){return t.get() > 2;}
 }
