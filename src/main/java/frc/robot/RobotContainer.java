@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -48,13 +52,13 @@ public class RobotContainer {
   private final JoystickButton roller_down;
   private final JoystickButton drive_forward;
   private final JoystickButton drive_resetfod;
-
+  private final PathPlannerTrajectory testTrajectory;
 
   // private final JoystickButton arm_setGround;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-
+    testTrajectory = PathPlanner.loadPath("2CubeBalance", new PathConstraints(2,2));
       // Configure the button bindings
     joystick = new Joystick(0);
     joystick2 = new Joystick(1);
@@ -71,6 +75,7 @@ public class RobotContainer {
     roller_up = new JoystickButton(joystick, ButtonConstants.BUTTON_INTAKE_UP);
     roller_down = new JoystickButton(joystick, ButtonConstants.BUTTON_INTAKE_DOWN);
     drive_resetfod = new JoystickButton(guitar, ButtonConstants.BUTTON_RESETFOD);
+
     // hand_close = new JoystickButton(guitar,ButtonConstants.BUTTON_HAND_OPEN_GUITAR);
     // hand_open = new JoystickButton(guitar, ButtonConstants.BUTTON_HAND_OPEN_GUITAR);
     // arm_backwards = new JoystickButton(guitar, Constants.ButtonConstants.BUTTON_ARM_RETRACT_GUITAR);
@@ -91,6 +96,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    
     //b_turnWrist.onTrue(new TurnWrist(wrist));
     // arm_backwards.whileTrue(new ArmBackward(arm));
     // arm_forwards.whileTrue(new ArmForward(arm));
@@ -133,6 +139,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new AutoSequence(drivetrain, hand);
+    //return new AutoSequence(drivetrain, hand);
+    return drivetrain.followTrajectoryCommand(testTrajectory, true);
   }
 }
