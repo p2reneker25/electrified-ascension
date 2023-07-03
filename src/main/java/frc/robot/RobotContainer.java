@@ -11,7 +11,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.AutoBalence;
+import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutoSequence;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.HandGrab;
@@ -58,7 +58,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    testTrajectory = PathPlanner.loadPath("2CubeBalance", new PathConstraints(2,2));
+    testTrajectory = PathPlanner.loadPath("testingpath", new PathConstraints(2,2));
       // Configure the button bindings
     joystick = new Joystick(0);
     joystick2 = new Joystick(1);
@@ -113,7 +113,7 @@ public class RobotContainer {
     // arm_up.whileTrue(new PivotArm(arm, Constants.ArmConstants.ARM_SPEED));
     // arm_down.whileTrue(new PivotArm(arm,-Constants.ArmConstants.ARM_SPEED * 0.5));
     drivetrain.setDefaultCommand(new DriveCommand(drivetrain, joystick, joystick2));
-    drive_forward.whileTrue(new AutoBalence(drivetrain));
+    drive_forward.whileTrue(new AutoBalance(drivetrain));
     drive_resetfod.whileTrue(new ResetFOD(drivetrain));
     // b_positionrobot.whileTrue(new PositionRobot(drivetrain, vision));
     // b_break.whileTrue(new Brake(arm));
