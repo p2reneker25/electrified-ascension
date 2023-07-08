@@ -5,6 +5,8 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -19,7 +21,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
@@ -39,6 +43,7 @@ public class DriveTrain extends SubsystemBase {
   public boolean autoMode = false;
   public int hatValue = 0;
   public AHRS NAVX = new AHRS(I2C.Port.kOnboard);
+  public Pose2d pose;
   private double navxoffset = 0;
   public PIDController navxpid;
   public Accelerometer accelerometer = new BuiltInAccelerometer();
@@ -46,6 +51,7 @@ public class DriveTrain extends SubsystemBase {
   double navx_tilt = 0;
   double fodoffset = 0;
   public double pitchoffset = 0;
+  
 
   private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
       new Translation2d(-DriveConstants.CHASSIS_WIDTH / 2,DriveConstants.CHASSIS_LENGTH / 2), 
@@ -134,6 +140,7 @@ public class DriveTrain extends SubsystemBase {
     backleft.set(speed, 0, true);
 
   }
+
   public void setPitchOffset(double p) { //Auto platform stuff, pls ignore
     pitchoffset = p;
   }
@@ -167,6 +174,9 @@ public class DriveTrain extends SubsystemBase {
   public Translation3d getAccelerometer() { //gets the accelerometer values, pretty self explanatory
     return new Translation3d(accelerometer.getX(), accelerometer.getY(), accelerometer.getZ());
   }
+  public Pose2d getPose(){
+    return pose;
+  }
   public double encoderToOptimize(double encval, float offset) { //puts encoder value into proper frame of reference
     encval -= offset;
     if (encval > 360) {encval-=360;}
@@ -178,6 +188,23 @@ public class DriveTrain extends SubsystemBase {
     // if (stateval < 0) {stateval+=360;}
     stateval += 180;
     return stateval;
+  }
+  public void setModuleStates(SwerveModuleState[] desiredStates){
+    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates,4.88);
+    frontleft.setDesiredState(desiredStates[0],true);
+    frontright.setDesiredState(desiredStates[1],false);
+    backleft.setDesiredState(desiredStates[2],false);
+    backright.setDesiredState(desiredStates[3],true);
+  }
+  public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath){
+    return new SequentialCommandGroup(
+      new InstantCommand(() -> {
+        if(isFirstPath){
+          this.resetFOD();
+        }
+      }),
+      new PPSwerveControllerCommand(traj, this::getPose , kinematics, new PIDController(DriveConstants.P, 0, 0), new PIDController(DriveConstants.P, 0, 0), new PIDController(DriveConstants.I, 0, 0), this::setModuleStates, this)
+    );
   }
   public double getNAVXStraightenVal() { //can use a PID loop to calculate an angle to rotate the robot to avoid drift. Tested but not currently used
     return navxpid.calculate(NAVX.getAngle()-navxoffset, 0);
@@ -258,7 +285,7 @@ public class DriveTrain extends SubsystemBase {
     }
     
     //gets the swerve drive pose for odometry, measurements untested
-    Pose2d pose = m_odometry.update(new Rotation2d(), 
+    pose = m_odometry.update(new Rotation2d(), 
     new SwerveModulePosition[] {
       new SwerveModulePosition(frontright.getDriveEncoder()*0.1156, new Rotation2d(frontright.getEncoder() * (3.14/180.0))),
       new SwerveModulePosition(frontleft.getDriveEncoder()*0.1156, new Rotation2d(frontleft.getEncoder() * (3.14/180.0))),

@@ -23,5 +23,8 @@ public class Jackson9001 extends SubsystemBase {
     public void setRollerCylinder(Value v){
         solenoid.set(v);
     }
+    public double getAmps(){
+        return rollerMotor.getSupplyCurrent();
+    }
 
 }

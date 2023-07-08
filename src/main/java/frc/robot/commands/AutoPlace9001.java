@@ -3,14 +3,15 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hand;
+import frc.robot.subsystems.Jackson9001;
 
-public class AutoPlace extends CommandBase {
+public class AutoPlace9001 extends CommandBase {
     
-    private Hand handMotor;
+    private Jackson9001 intake;
     private double speed;
     private Timer t;
-    public AutoPlace(Hand h, double s){
-        handMotor = h;
+    public AutoPlace9001(Jackson9001 j, double s){
+        intake = j;
         speed = s;
         t = new Timer();
     }
@@ -21,11 +22,11 @@ public class AutoPlace extends CommandBase {
     }
     @Override
     public void execute(){
-        handMotor.setHandSpeed(speed);
+        intake.setRollerSpeed(speed);
     }
     @Override
     public void end(boolean interrupted){
-        handMotor.setHandSpeed(0);
+        intake.setRollerSpeed(0);
         t.stop();
     }
     @Override

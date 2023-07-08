@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.Constants.DriveConstants;
@@ -68,6 +69,10 @@ public class DriveModule {
         
         drive.set(drivespeed);
     }
+    public void setDesiredState(SwerveModuleState state,boolean flipPID){
+        set(state.speedMetersPerSecond,state.angle.getDegrees(),flipPID);
+    }
+
     public double getDriveEncoder() {
         return drive.getEncoder().getPosition()-initDriveEncoder;
     }

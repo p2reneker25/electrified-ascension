@@ -3,7 +3,7 @@ import frc.robot.subsystems.*;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-public class AutoBalence extends CommandBase {
+public class AutoBalance extends CommandBase {
     
     
     private DriveTrain drive;
@@ -11,7 +11,7 @@ public class AutoBalence extends CommandBase {
     double lastSensor = 0;
     int alternate_count = 0;
     double lastSpeed = 0;
-    public AutoBalence(DriveTrain d){
+    public AutoBalance(DriveTrain d){
         drive = d;
         pid = new PIDController(0.02, 0, 0);
     }
