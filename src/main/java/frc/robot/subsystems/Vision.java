@@ -24,6 +24,8 @@ public class Vision extends SubsystemBase {
         SmartDashboard.putNumber("robot y", botpose.getY());
         SmartDashboard.putNumber("robot angle", botpose.getRotation().getDegrees());
         SmartDashboard.putBoolean("limelight found", limelight.containsKey("botpose"));
+        SmartDashboard.putBoolean("AprilTag found",targetFound());
+        SmartDashboard.putNumber("AprilTag ID", getAprilTagId());
     }
     public Transform2d getRelativeBotPose() {
         Transform2d botpose = getBotPose();
@@ -33,6 +35,7 @@ public class Vision extends SubsystemBase {
         botpose = new Transform2d(new Translation2d(x, y), botpose.getRotation());
         return botpose;
     }
+
     public Transform2d getBotPose() {
         Transform2d t;
         double[] botpose = limelight.getEntry("botpose").getDoubleArray(new double[1]);
@@ -42,4 +45,17 @@ public class Vision extends SubsystemBase {
         t = new Transform2d(new Translation2d(botpose[0], botpose[1]), new Rotation2d(botpose[5] * (3.14/180.0)));
         return t;
     }
+    public boolean targetFound(){
+        double id;
+        double[] tagid = limelight.getEntry("tid").getDoubleArray(new double[1]);
+        id = tagid[0];
+        return(!(id == 0));
+    }
+    public double getAprilTagId(){
+        double id;
+        double[] tagid = limelight.getEntry("tid").getDoubleArray(new double[1]);
+        id = tagid[0];
+        return id;
+    }
+    
 }
