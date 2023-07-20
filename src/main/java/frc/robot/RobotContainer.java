@@ -141,7 +141,9 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     //return new AutoSequence(drivetrain, hand);
-    
+
+
+    //should follow testingpath.path (really hope this works)
     return drivetrain.followTrajectoryCommand(testTrajectory, true);
   }
 }

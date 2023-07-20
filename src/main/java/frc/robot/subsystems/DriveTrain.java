@@ -189,20 +189,22 @@ public class DriveTrain extends SubsystemBase {
     stateval += 180;
     return stateval;
   }
-  public void setModuleStates(SwerveModuleState[] desiredStates){
+  public void setModuleStates(SwerveModuleState[] desiredStates){ //manual set of swerve module states, used for trajectories
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates,4.88);
     frontleft.setDesiredState(desiredStates[0],true);
     frontright.setDesiredState(desiredStates[1],false);
     backleft.setDesiredState(desiredStates[2],false);
     backright.setDesiredState(desiredStates[3],true);
   }
-  public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath){
+  public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath){ //returns command to follow a trajectory (not tested, I hope it works)
     return new SequentialCommandGroup(
+      //resets odometry if first trajectory followed
       new InstantCommand(() -> {
         if(isFirstPath){
           this.resetFOD();
         }
       }),
+      //swerve trajectory controller
       new PPSwerveControllerCommand(traj, this::getPose , kinematics, new PIDController(DriveConstants.P, 0, 0), new PIDController(DriveConstants.P, 0, 0), new PIDController(DriveConstants.I, 0, 0), this::setModuleStates, this)
     );
   }

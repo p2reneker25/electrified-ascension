@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Arm extends SubsystemBase{
+public class Arm extends SubsystemBase{ //Subsystem no longer used
     private TalonFX talon;
     CANSparkMax extendMotor;
     DoubleSolenoid brake;
