@@ -116,6 +116,12 @@ public class DriveTrain extends SubsystemBase {
     NAVX.setAngleAdjustment(0);
     NAVX.reset();
   }
+  public SwerveDriveKinematics getKinematics(){
+    return kinematics;
+  }
+  public void resetPose(Pose2d p){
+    p = new Pose2d();
+  }
   public void drive(double x, double y, double z, int hat) {
     if (autoMode) {return;}
 
@@ -144,6 +150,7 @@ public class DriveTrain extends SubsystemBase {
   public void setPitchOffset(double p) { //Auto platform stuff, pls ignore
     pitchoffset = p;
   }
+  
   public double clampToAngle(double i) { //helper method to clamp angle to 0 to 360
     if (i > 360.0) {
       i-=360.0;
@@ -218,6 +225,13 @@ public class DriveTrain extends SubsystemBase {
   public double getPitch() { //Gets pitch of the robot for autonomous platform
     return NAVX.getPitch()+pitchoffset+10;
   }
+  public ChassisSpeeds getChassisSpeeds(){
+    return chassisSpeeds;
+  }
+  public void setChassisSpeeds(ChassisSpeeds speeds){
+    chassisSpeeds = speeds;
+  }
+  
   @Override
   public void periodic() {
     //takes the kinematics with the module positions and the chassisSpeeds from the drive to give the desired states for each module

@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.AutoBalance;
+import frc.robot.commands.AutoIntake;
+import frc.robot.commands.AutoPlace9001;
 import frc.robot.commands.AutoSequence;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.HandGrab;
@@ -25,6 +27,7 @@ import frc.robot.subsystems.Vision;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ButtonConstants;
+import frc.robot.autos.AutoBuilder;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -40,6 +43,7 @@ public class RobotContainer {
   // private final Arm arm = new Arm();
   private final Hand hand = new Hand();
   private final Jackson9001 roller = new Jackson9001();
+  AutoBuilder builder = new AutoBuilder("fullAuto2CubeBalance", new String[]{"PlaceOg","IntakeDown","Intake","IntakeUp","Place2","Balance"}, new Command[]{new AutoPlace9001(roller, 1),new Set9001(roller,true),new AutoIntake(roller), new Set9001(roller, false),new AutoPlace9001(roller, 0.25), new AutoBalance(drivetrain)}, drivetrain);
   private final Joystick joystick;
   private final Joystick joystick2;
   private final Joystick guitar;
@@ -141,6 +145,10 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     //return new AutoSequence(drivetrain, hand);
+    
+
+    //should follow the autobuilder's auto (in this case, 2 cube and balance)
+    //return builder.getAutoCommand();
 
 
     //should follow testingpath.path (really hope this works)
