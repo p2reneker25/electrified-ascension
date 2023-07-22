@@ -48,6 +48,10 @@ public final class Constants {
 
         public static final double FORWARD_SPEED = 0.5;
     }
+    public final class TrajectoryConstants{
+        public static final double MAX_TRAJECORY_VELOCITY_METERS_PER_SECOND = 4;
+        public static final double MAX_TRAJETORY_ACCELERATION_PETERS_PER_SECOND_SQUARED = 3;
+    }
     public final class ClawConstants {
         public static final int ENCODER_TICKS = 42;
         public static final int WRIST_CAN = 5;

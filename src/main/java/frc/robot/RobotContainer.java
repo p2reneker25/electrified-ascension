@@ -27,6 +27,7 @@ import frc.robot.subsystems.Vision;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ButtonConstants;
+import frc.robot.Constants.TrajectoryConstants;
 import frc.robot.autos.AutoBuilder;
 
 /**
@@ -62,11 +63,15 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    testTrajectory = PathPlanner.loadPath("testingpath", new PathConstraints(2,2));
+    testTrajectory = PathPlanner.loadPath("testingpath", new PathConstraints(
+    TrajectoryConstants.MAX_TRAJECORY_VELOCITY_METERS_PER_SECOND,
+    TrajectoryConstants.MAX_TRAJETORY_ACCELERATION_PETERS_PER_SECOND_SQUARED
+    ));
       // Configure the button bindings
     joystick = new Joystick(0);
     joystick2 = new Joystick(1);
     guitar = new Joystick(2);
+
     // b_armExtend = new JoystickButton(joystick, ButtonConstants.BUTTON_ARM_EXTEND);
     // b_armRetract = new JoystickButton(joystick, ButtonConstants.BUTTON_ARM_RETRACT);
     // b_positionrobot = new JoystickButton(joystick, ButtonConstants.BUTTON_POSITION);
