@@ -207,6 +207,7 @@ public class DriveTrain extends SubsystemBase {
     backleft.setDesiredState(desiredStates[2],false);
     backright.setDesiredState(desiredStates[3],true);
   }
+  //EXTRMELY BALLER CODE
   public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath){ //returns command to follow a trajectory (not tested, I hope it works)
     return new SequentialCommandGroup(
       //resets odometry if first trajectory followed

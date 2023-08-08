@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.TrajectoryConstants;
 import frc.robot.subsystems.DriveTrain;
-
+//EXTRMELY BALLER CODE
 public class AutoBuilder { //helper class to more efficiently use PathPlanner AutoBuilder, also has support for non pathplanner autobuilder autos
     Command fullAutoCommand;
     SequentialCommandGroup sequentialGroup;
