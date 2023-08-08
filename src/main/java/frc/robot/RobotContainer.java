@@ -63,10 +63,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    testTrajectory = PathPlanner.loadPath("testingpath", new PathConstraints(
-    TrajectoryConstants.MAX_TRAJECORY_VELOCITY_METERS_PER_SECOND,
-    TrajectoryConstants.MAX_TRAJETORY_ACCELERATION_PETERS_PER_SECOND_SQUARED
-    ));
+    testTrajectory = PathPlanner.loadPath("testingpath", TrajectoryConstants.TrajectoryConstraints);
       // Configure the button bindings
     joystick = new Joystick(0);
     joystick2 = new Joystick(1);

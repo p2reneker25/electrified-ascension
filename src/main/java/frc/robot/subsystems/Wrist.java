@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ClawConstants;
-public class Wrist extends SubsystemBase {
+public class Wrist extends SubsystemBase { //unused
     CANSparkMax speedcontroller;
     int targetAngle;
     public Wrist() {

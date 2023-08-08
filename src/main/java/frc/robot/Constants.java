@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.PathConstraints;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -48,9 +50,10 @@ public final class Constants {
 
         public static final double FORWARD_SPEED = 0.5;
     }
-    public final class TrajectoryConstants{
+    public static final class TrajectoryConstants{
         public static final double MAX_TRAJECORY_VELOCITY_METERS_PER_SECOND = 4;
         public static final double MAX_TRAJETORY_ACCELERATION_PETERS_PER_SECOND_SQUARED = 3;
+        public static final PathConstraints TrajectoryConstraints = new PathConstraints(MAX_TRAJECORY_VELOCITY_METERS_PER_SECOND, MAX_TRAJETORY_ACCELERATION_PETERS_PER_SECOND_SQUARED);
     }
     public final class ClawConstants {
         public static final int ENCODER_TICKS = 42;
