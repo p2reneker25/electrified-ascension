@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 public class DriveTrain extends SubsystemBase {
   
   public final DriveModule frontright;
@@ -52,7 +53,8 @@ public class DriveTrain extends SubsystemBase {
   double fodoffset = 0;
   public double pitchoffset = 0;
   
-
+  
+  //maps where the swerve modules are on the robot
   private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
       new Translation2d(-DriveConstants.CHASSIS_WIDTH / 2,DriveConstants.CHASSIS_LENGTH / 2), 
       new Translation2d(-DriveConstants.CHASSIS_WIDTH/2,-DriveConstants.CHASSIS_LENGTH/2),
@@ -88,7 +90,7 @@ public class DriveTrain extends SubsystemBase {
       DriveConstants.BACKLEFT_MODULE_OFFSET
     );
 
-    //initializing odometry
+    //initializing odometry (robot position)
     m_odometry = new SwerveDriveOdometry(kinematics, new Rotation2d(), 
       new SwerveModulePosition[] {
         new SwerveModulePosition(frontright.getDriveEncoder(), new Rotation2d()),
@@ -119,9 +121,11 @@ public class DriveTrain extends SubsystemBase {
   public SwerveDriveKinematics getKinematics(){
     return kinematics;
   }
+  //resets bot pose to p
   public void resetPose(Pose2d p){
-    p = new Pose2d();
+    pose = p;
   }
+  //creates a chassisspeeds based off of values (usually from joystick)
   public void drive(double x, double y, double z, int hat) {
     if (autoMode) {return;}
 
@@ -146,7 +150,7 @@ public class DriveTrain extends SubsystemBase {
     backleft.set(speed, 0, true);
 
   }
-
+  //navx is usually off for some reason,sets how many degrees off it is
   public void setPitchOffset(double p) { //Auto platform stuff, pls ignore
     pitchoffset = p;
   }
