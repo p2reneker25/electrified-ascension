@@ -33,8 +33,8 @@ public class AutoBuilder { //helper class to more efficiently use PathPlanner Au
         }
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(drive::getPose,
          drive::resetPose, 
-         new PIDConstants(DriveConstants.P, 0, 0),
-         new PIDConstants(DriveConstants.P, 0, 0), 
+         new PIDConstants(0.000001, 0, 0),
+         new PIDConstants(0.000001, 0, 0), 
          drive::setChassisSpeeds,
          eventMap,
          drive

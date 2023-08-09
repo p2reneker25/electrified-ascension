@@ -217,7 +217,7 @@ public class DriveTrain extends SubsystemBase {
         }
       }),
       //swerve trajectory controller
-      new PPSwerveControllerCommand(traj, this::getPose , kinematics, new PIDController(DriveConstants.P, 0, 0), new PIDController(DriveConstants.P, 0, 0), new PIDController(DriveConstants.I, 0, 0), this::setModuleStates, this)
+      new PPSwerveControllerCommand(traj, this::getPose , kinematics, new PIDController(0.000001, 0, 0), new PIDController(0.000001, 0, 0), new PIDController(DriveConstants.I, 0, 0), this::setModuleStates, this)
     );
   }
   public double getNAVXStraightenVal() { //can use a PID loop to calculate an angle to rotate the robot to avoid drift. Tested but not currently used
