@@ -119,6 +119,7 @@ public class RobotContainer {
     // arm_up.whileTrue(new PivotArm(arm, Constants.ArmConstants.ARM_SPEED));
     // arm_down.whileTrue(new PivotArm(arm,-Constants.ArmConstants.ARM_SPEED * 0.5));
     drivetrain.setDefaultCommand(new DriveCommand(drivetrain, joystick, joystick2));
+
     drive_forward.whileTrue(new AutoBalance(drivetrain));
     drive_resetfod.whileTrue(new ResetFOD(drivetrain));
     // b_positionrobot.whileTrue(new PositionRobot(drivetrain, vision));
